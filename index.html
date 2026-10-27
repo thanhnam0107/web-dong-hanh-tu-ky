@@ -3,97 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đồng Hành Cùng Con - Nền tảng Hỗ trợ Phụ huynh Trẻ Tự kỷ</title>
-    <!-- Nhúng thư viện giao diện chuyên nghiệp Tailwind CSS -->
+    <title>Đồng Hành Cùng Con - Cùng Lana Can Thiệp Tự Kỷ Tại Nhà</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Nhúng phông chữ Inter chuẩn hiện đại dễ đọc -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Thiết lập hình nền cho khu vực mở đầu */
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .hero-bg {
-            background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), url('hinh-nen.jpg');
+            background-image: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.88)), url('hinh-nen.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
     <!-- 1. THANH ĐIỀU HƯỚNG (NAVIGATION BAR) -->
-    <header class="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+    <header class="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold text-teal-700">🌱 Đồng Hành Cùng Con</div>
+            <a href="#" class="text-xl font-bold text-teal-700">🌱 Đồng Hành Cùng Con</a>
             <nav class="hidden md:flex space-x-6 font-medium text-slate-600">
-                <a href="#lo-trinh" class="hover:text-teal-600 transition">Lộ trình theo tuổi</a>
+                <a href="#gioi-thieu" class="hover:text-teal-600 transition">Về Lana</a>
+                <a href="#lo-trinh" class="hover:text-teal-600 transition">Bài học can thiệp</a>
                 <a href="#sang-loc" class="hover:text-teal-600 transition">Sàng lọc nhanh</a>
-                <a href="#hoc-lieu" class="hover:text-teal-600 transition">Học liệu trực quan</a>
             </nav>
-            <a href="#sang-loc" class="bg-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-teal-700 transition">
-                Đánh giá sơ bộ
-            </a>
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleAdminModal()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-medium border border-slate-300 transition">
+                    ⚙️ Quản trị (Thêm bài)
+                </button>
+                <a href="#sang-loc" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition">
+                    Đánh giá sơ bộ
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- 2. PHẦN MỞ ĐẦU CÓ HÌNH NỀN (HERO SECTION) -->
+    <!-- 2. PHẦN MỞ ĐẦU (HERO SECTION) -->
     <section class="hero-bg py-16 md:py-24 px-4 text-white">
         <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-10 items-center">
-            
-            <!-- Cột bên trái: Nội dung chữ dẫn dắt -->
             <div class="md:col-span-7 text-left">
                 <span class="bg-teal-500/20 border border-teal-400/30 text-teal-200 text-sm font-semibold px-3 py-1 rounded-full">
-                    Hướng dẫn thực hành dựa trên khoa học chứng cứ
+                    Can thiệp 100% tại nhà dựa trên khoa học chứng cứ
                 </span>
                 <h1 class="text-3xl md:text-5xl font-bold text-white mt-4 leading-tight">
                     Cha mẹ là người thầy tốt nhất trong hành trình phát triển của trẻ tự kỷ
                 </h1>
                 <p class="mt-4 text-lg text-slate-200 leading-relaxed">
-                    Hệ thống hóa các phương pháp can thiệp giao tiếp, quản lý hành vi và hỗ trợ giác quan tại nhà theo từng giai đoạn phát triển.
+                    Hệ thống hóa các phương pháp ABA, ESDM, PRT & Floortime giúp cha mẹ bước vào thế giới của con và đồng hành cùng con phát triển rực rỡ mỗi ngày.
                 </p>
                 <div class="mt-8 flex flex-wrap gap-4">
                     <a href="#lo-trinh" class="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition shadow-lg">
-                        Bắt đầu lộ trình can thiệp
+                        Xem các bài học thực hành
                     </a>
-                    <a href="#sang-loc" class="bg-white/10 border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition">
-                        Kiểm tra dấu hiệu sớm
+                    <a href="#gioi-thieu" class="bg-white/10 border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition">
+                        Câu chuyện của Lana
                     </a>
                 </div>
             </div>
-
-            <!-- Cột bên phải: Hiển thị trọn vẹn bức ảnh gốc (Không bị cắt chữ và người) -->
             <div class="md:col-span-5 flex justify-center">
                 <img src="hinh-nen.jpg" alt="Tự kỷ không phải lỗi của bạn" class="w-full max-w-sm rounded-2xl shadow-2xl border-4 border-white/20 object-cover">
             </div>
-
         </div>
     </section>
 
-    <!-- 3. TÍNH NĂNG TƯƠNG TÁC 1: LỌC BÀI TẬP THEO MỨC ĐỘ CỦA TRẺ -->
-    <section id="lo-trinh" class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-2xl font-bold text-slate-900 mb-2">Hướng dẫn can thiệp tại nhà theo mục tiêu</h2>
-        <p class="text-slate-600 mb-6">Chọn kỹ năng bạn đang muốn hỗ trợ con để xem hướng dẫn thực hành cụ thể:</p>
+    <!-- 3. PHẦN GIỚI THIỆU: CÂU CHUYỆN CỦA LANA -->
+    <section id="gioi-thieu" class="py-16 px-4 bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto">
+            <div class="bg-gradient-to-br from-teal-50/70 to-slate-50 p-8 md:p-12 rounded-2xl border border-teal-100 shadow-sm">
+                <span class="text-teal-700 font-bold text-sm uppercase tracking-wider">Lời nhắn gửi từ người sáng lập</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-2">
+                    "Xin chào, mình là Lana — mẹ của một em bé rối loạn phổ tự kỷ (ASD)"
+                </h2>
+                
+                <p class="mt-4 text-slate-700 leading-relaxed">
+                    Sau khi con nhận chẩn đoán, giống như bao cha mẹ có con tự kỷ ngoài kia, cuộc sống của mình bỗng chốc thay đổi tất cả. Việc đồng hành cùng con trở nên quan trọng hơn hết thảy mọi thứ trên đời! Mình lựa chọn <strong>tự can thiệp cho con 100% tại nhà</strong>, và để làm điều đó một cách tốt nhất, mình đã:
+                </p>
+
+                <!-- 3 trụ cột chuyên môn & tâm huyết -->
+                <div class="grid md:grid-cols-3 gap-6 my-8">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-2xl mb-2">🎓</div>
+                        <h3 class="font-bold text-slate-900">Nền tảng Tâm lý học Quốc tế</h3>
+                        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                            Trở thành học viên Cao học ngành Tâm lý học tại <strong>City University of Hong Kong (CityU)</strong> — Top 7 Châu Á & Top 52 Thế giới theo QS University Rankings.
+                        </p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-2xl mb-2">🧩</div>
+                        <h3 class="font-bold text-slate-900">Phương pháp Chuẩn Khoa học</h3>
+                        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                            Học chuyên sâu về Phân tích Hành vi Ứng dụng (<strong>ABA</strong>) và các mô hình can thiệp sớm tiên tiến như <strong>PRT, ESDM, Floortime</strong>.
+                        </p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-2xl mb-2">💛</div>
+                        <h3 class="font-bold text-slate-900">Thấu hiểu & Tôn trọng</h3>
+                        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                            Dành trọn thời gian tìm cách bước vào thế giới của con, giúp con phát triển rực rỡ nhất có thể với bộ não khác biệt của riêng con.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-teal-700 text-white p-6 rounded-xl">
+                    <p class="font-medium leading-relaxed">
+                        "Và mình nghĩ việc bạn đang ở đây, đọc những dòng chữ này, có nghĩa là chúng ta đều có những đứa trẻ đặc biệt trong đời. Hy vọng tại ngôi nhà nhỏ này, bạn sẽ:"
+                    </p>
+                    <ul class="mt-3 space-y-2 text-teal-100 text-sm md:text-base">
+                        <li>✨ <strong>Có được những thông tin thực hành hữu ích</strong> trong việc đồng hành và dạy con tại nhà.</li>
+                        <li>✨ <strong>Có thêm động lực và sự vững tâm</strong> để tiếp tục cố gắng cùng con mỗi ngày.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. DANH SÁCH BÀI HỌC ĐỒNG HÀNH CÙNG TRẺ TỰ KỶ -->
+    <section id="lo-trinh" class="max-w-6xl mx-auto px-4 py-14">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Thư viện Bài học Can thiệp Tại nhà</h2>
+                <p class="text-slate-600 mt-1">Chọn nhóm kỹ năng bạn muốn thực hành cùng con hôm nay:</p>
+            </div>
+            <button onclick="toggleAdminModal()" class="mt-4 md:mt-0 bg-teal-50 text-teal-700 border border-teal-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-teal-100 transition">
+                + Viết bài học mới
+            </button>
+        </div>
 
         <!-- Nút bấm lọc danh mục -->
         <div class="flex flex-wrap gap-3 mb-8">
-            <button onclick="filterGuides('all')" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700">Tất cả kỹ năng</button>
-            <button onclick="filterGuides('giao-tiep')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Giao tiếp & Chú ý chung</button>
-            <button onclick="filterGuides('hanh-vi')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Kiểm soát hành vi & Giác quan</button>
-            <button onclick="filterGuides('tu-lap')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Kỹ năng tự phục vụ</button>
+            <button onclick="filterGuides('all')" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700">Tất cả bài học</button>
+            <button onclick="filterGuides('giao-tiep')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Giao tiếp & Chú ý chung (ESDM/PRT)</button>
+            <button onclick="filterGuides('hanh-vi')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Quản lý hành vi & Giác quan (ABA)</button>
+            <button onclick="filterGuides('tu-lap')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Chơi tương tác & Tự lập (Floortime)</button>
         </div>
 
         <!-- Khu vực hiển thị danh sách bài hướng dẫn -->
         <div id="guide-container" class="grid md:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 4. TÍNH NĂNG TƯƠNG TÁC 2: CÔNG CỤ KIỂM TRA NHANH DẤU HIỆU CỜ ĐỎ -->
+    <!-- 5. CÔNG CỤ KIỂM TRA NHANH DẤU HIỆU SỚM -->
     <section id="sang-loc" class="bg-white border-y border-slate-200 py-14 px-4">
         <div class="max-w-3xl mx-auto">
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Bảng kiểm tra nhanh dấu hiệu giao tiếp sớm</h2>
-            <p class="text-sm text-slate-500 mb-6">
-                *Lưu ý: Công cụ này giúp phụ huynh hệ thống hóa quan sát tại nhà, không thay thế chẩn đoán lâm sàng của bác sĩ chuyên khoa.
-            </p>
-
+            <p class="text-sm text-slate-500 mb-6">*Lưu ý: Công cụ giúp phụ huynh hệ thống hóa quan sát tại nhà, không thay thế chẩn đoán lâm sàng.</p>
             <div class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
@@ -101,7 +152,7 @@
                 </label>
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
-                    <span>Trẻ chưa biết dùng ngón trỏ để chỉ vào đồ vật mình thích hoặc khoe với người lớn (từ 18 tháng tuổi trở lên).</span>
+                    <span>Trẻ chưa biết dùng ngón trỏ để chỉ vào đồ vật mình thích hoặc khoe với người lớn.</span>
                 </label>
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
@@ -109,25 +160,97 @@
                 </label>
                 <label class="flex items-start space-x-3 cursor-pointer">
                     <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
-                    <span>Trẻ có các hành vi lặp đi lặp lại (xếp hàng đồ chơi, quay bánh xe, vẫy tay) hoặc quá nhạy cảm với âm thanh.</span>
+                    <span>Trẻ có các hành vi lặp đi lặp lại hoặc quá nhạy cảm với âm thanh, ánh sáng.</span>
                 </label>
-
                 <button onclick="evaluateChecklist()" class="mt-4 w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">
                     Xem khuyến nghị hành động cho cha mẹ
                 </button>
-
-                <!-- Hộp hiển thị kết quả phân tích tự động -->
                 <div id="result-box" class="hidden mt-4 p-4 rounded-lg border"></div>
             </div>
         </div>
     </section>
 
-    <!-- 5. CHÂN TRANG (FOOTER) -->
+    <!-- 6. CỬA SỐ ĐỌC CHI TIẾT BÀI VIẾT (MODAL) -->
+    <div id="article-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl">
+            <div class="flex justify-between items-start border-b border-slate-100 pb-4">
+                <div>
+                    <span id="modal-tag" class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded"></span>
+                    <h3 id="modal-title" class="text-xl md:text-2xl font-bold text-slate-900 mt-2"></h3>
+                </div>
+                <button onclick="closeArticleModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+            </div>
+            <div id="modal-content" class="mt-5 text-slate-700 leading-relaxed space-y-4 whitespace-pre-line"></div>
+            <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                <span id="modal-duration" class="text-xs text-slate-500"></span>
+                <button onclick="closeArticleModal()" class="bg-slate-800 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-slate-900">Đóng bài viết</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. BẢNG QUẢN TRỊ ADMIN ĐỂ THÊM BÀI HỌC MỚI -->
+    <div id="admin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                <h3 class="text-xl font-bold text-slate-900">⚙️ Bảng Quản Trị - Đăng Bài Học Mới</h3>
+                <button onclick="toggleAdminModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+            </div>
+
+            <div class="space-y-4 mt-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tiêu đề bài học *</label>
+                    <input id="admin-title" type="text" placeholder="Ví dụ: 3 bước dạy con giao tiếp mắt qua trò chơi ú òa" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Chuyên mục *</label>
+                        <select id="admin-category" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                            <option value="giao-tiep">Giao tiếp & Chú ý chung</option>
+                            <option value="hanh-vi">Quản lý hành vi & Giác quan</option>
+                            <option value="tu-lap">Chơi tương tác & Tự lập</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Nhãn phương pháp (Tag) *</label>
+                        <input id="admin-tag" type="text" placeholder="Ví dụ: Phương pháp ESDM" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Thời lượng thực hành gợi ý</label>
+                    <input id="admin-duration" type="text" placeholder="Ví dụ: Thực hành: 15 phút/ngày" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tóm tắt ngắn (Hiển thị ngoài thẻ bài viết) *</label>
+                    <textarea id="admin-summary" rows="2" placeholder="Tóm tắt 1-2 câu về lợi ích của bài tập này..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nội dung hướng dẫn chi tiết từng bước *</label>
+                    <textarea id="admin-content" rows="5" placeholder="Nhập chi tiết từng bước thực hành cho phụ huynh..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <button onclick="addNewPost()" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">
+                    1. Đăng lên trang web & Tạo mã lưu vĩnh viễn
+                </button>
+
+                <!-- Hộp xuất mã code để copy vào app.js -->
+                <div id="code-export-box" class="hidden bg-slate-900 text-teal-300 p-4 rounded-xl text-xs font-mono">
+                    <p class="text-white font-sans font-semibold mb-2">
+                        ✅ Bài viết đã hiển thị trên trang! Để lưu vĩnh viễn lên Internet cho mọi phụ huynh cùng đọc, bạn bấm nút Copy bên dưới và dán thêm vào đầu danh sách `guidesData` trong file `app.js`:
+                    </p>
+                    <pre id="generated-code" class="overflow-x-auto whitespace-pre-wrap bg-slate-950 p-3 rounded border border-slate-700"></pre>
+                    <button onclick="copyGeneratedCode()" class="mt-3 bg-teal-500 text-slate-950 font-sans font-bold px-4 py-1.5 rounded hover:bg-teal-400">
+                        📋 Copy đoạn mã bài viết này
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. CHÂN TRANG (FOOTER) -->
     <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm">
-        <p>© 2026 Đồng Hành Cùng Con. Xây dựng vì cộng đồng phụ huynh trẻ rối loạn phổ tự kỷ.</p>
+        <p>© 2026 Đồng Hành Cùng Con - Sáng lập bởi Lana (MSc Psychology Candidate, CityU Hong Kong).</p>
     </footer>
 
-    <!-- Kết nối với bộ não xử lý logic JavaScript -->
     <script src="app.js"></script>
 </body>
 </html>
