@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đồng Hành Cùng Con - Nền tảng Hỗ trợ Phụ huynh Trẻ Tự kỷ</title>
+    <!-- Nhúng thư viện giao diện chuyên nghiệp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Nhúng phông chữ Inter chuẩn hiện đại dễ đọc -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- 1. THANH ĐIỀU HƯỚNG (NAVIGATION BAR) -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-teal-700">🌱 Đồng Hành Cùng Con</div>
+            <nav class="hidden md:flex space-x-6 font-medium text-slate-600">
+                <a href="#lo-trinh" class="hover:text-teal-600 transition">Lộ trình theo tuổi</a>
+                <a href="#sang-loc" class="hover:text-teal-600 transition">Sàng lọc nhanh</a>
+                <a href="#hoc-lieu" class="hover:text-teal-600 transition">Học liệu trực quan</a>
+            </nav>
+            <a href="#sang-loc" class="bg-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-teal-700 transition">
+                Đánh giá sơ bộ
+            </a>
+        </div>
+    </header>
+
+    <!-- 2. PHẦN MỞ ĐẦU (HERO SECTION) -->
+    <section class="bg-gradient-to-b from-teal-50 to-slate-50 py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="bg-teal-100 text-teal-800 text-sm font-semibold px-3 py-1 rounded-full">
+                Hướng dẫn thực hành dựa trên khoa học chứng cứ
+            </span>
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mt-4 leading-tight">
+                Cha mẹ là người thầy tốt nhất trong hành trình phát triển của trẻ tự kỷ
+            </h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+                Hệ thống hóa các phương pháp can thiệp giao tiếp, quản lý hành vi và hỗ trợ giác quan tại nhà theo từng giai đoạn phát triển.
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. TÍNH NĂNG TƯƠNG TÁC 1: LỌC BÀI TẬP THEO MỨC ĐỘ CỦA TRẺ -->
+    <section id="lo-trinh" class="max-w-6xl mx-auto px-4 py-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-2">Hướng dẫn can thiệp tại nhà theo mục tiêu</h2>
+        <p class="text-slate-600 mb-6">Chọn kỹ năng bạn đang muốn hỗ trợ con để xem hướng dẫn thực hành cụ thể:</p>
+
+        <!-- Nút bấm lọc danh mục -->
+        <div class="flex flex-wrap gap-3 mb-8">
+            <button onclick="filterGuides('all')" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700">Tất cả kỹ năng</button>
+            <button onclick="filterGuides('giao-tiep')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Giao tiếp & Chú ý chung</button>
+            <button onclick="filterGuides('hanh-vi')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Kiểm soát hành vi & Giác quan</button>
+            <button onclick="filterGuides('tu-lap')" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Kỹ năng tự phục vụ</button>
+        </div>
+
+        <!-- Khu vực hiển thị danh sách bài hướng dẫn (Sẽ được điều khiển bằng JavaScript) -->
+        <div id="guide-container" class="grid md:grid-cols-3 gap-6">
+            <!-- Nội dung sẽ tự động đổ vào đây từ file app.js -->
+        </div>
+    </section>
+
+    <!-- 4. TÍNH NĂNG TƯƠNG TÁC 2: CÔNG CỤ KIỂM TRA NHANH DẤU HIỆU CỜ ĐỎ -->
+    <section id="sang-loc" class="bg-white border-y border-slate-200 py-14 px-4">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Bảng kiểm tra nhanh dấu hiệu giao tiếp sớm</h2>
+            <p class="text-sm text-slate-500 mb-6">
+                *Lưu ý: Công cụ này giúp phụ huynh hệ thống hóa quan sát tại nhà, không thay thế chẩn đoán lâm sàng của bác sĩ chuyên khoa.
+            </p>
+
+            <div class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
+                    <span>Trẻ ít hoặc không giao tiếp mắt khi bố mẹ gọi tên hoặc khi đang chơi cùng.</span>
+                </label>
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
+                    <span>Trẻ chưa biết dùng ngón trỏ để chỉ vào đồ vật mình thích hoặc khoe với người lớn (từ 18 tháng tuổi trở lên).</span>
+                </label>
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
+                    <span>Trẻ thường kéo tay người lớn đặt vào đồ vật thay vì nhìn mặt và phát âm yêu cầu.</span>
+                </label>
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="check-item mt-1 w-5 h-5 text-teal-600 rounded">
+                    <span>Trẻ có các hành vi lặp đi lặp lại (xếp hàng đồ chơi, quay bánh xe, vẫy tay) hoặc quá nhạy cảm với âm thanh.</span>
+                </label>
+
+                <button onclick="evaluateChecklist()" class="mt-4 w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">
+                    Xem khuyến nghị hành động cho cha mẹ
+                </button>
+
+                <!-- Hộp hiển thị kết quả phân tích tự động -->
+                <div id="result-box" class="hidden mt-4 p-4 rounded-lg border"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CHÂN TRANG (FOOTER) -->
+    <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm">
+        <p>© 2026 Đồng Hành Cùng Con. Xây dựng vì cộng đồng phụ huynh trẻ rối loạn phổ tự kỷ.</p>
+    </footer>
+
+    <!-- Kết nối với bộ não xử lý logic JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
