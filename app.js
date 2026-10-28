@@ -1,3 +1,5 @@
+let editingPostId = null;       // Lưu ID bài viết đang sửa
+let editingCollection = null;   // Lưu tên collection
 // =========================================================================
 // KHO 35 BÀI HỌC & CHIA SẺ TỪ MẸ LANA & BÉ SÚP
 // =========================================================================
@@ -731,6 +733,7 @@ function renderCards() {
                     <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">
                         Đọc tiếp →
                     </button>
+                    <button onclick="openEditPost('${guide.id || ''}', '${guide.title}', \`${guide.content || guide.summary}\`, '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>
                 </div>
             </div>
         `;
@@ -934,6 +937,7 @@ async function loadTinTuc() {
                         <button onclick="openTinTucModal(${index})" class="text-teal-600 font-semibold text-xs hover:underline">
                             Đọc chi tiết →
                         </button>
+                        <button onclick="openEditPost('${docSnap.id}', '${item.tieuDe || ''}', \`${item.noiDung || ''}\`, '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tin_tuc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
                     </div>
                 </div>
             `;
@@ -977,6 +981,7 @@ async function loadTamSu() {
                         <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">
                             Gửi bình luận
                         </button>
+                        <button onclick="openEditPost('${docSnap.id}', '${item.tieuDe || ''}', \`${item.noiDung || ''}\`, '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tam_su')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
                     </div>
                     <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
                         🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (chống spam).
@@ -1063,6 +1068,24 @@ window.toggleAdminFields = function() {
     }
 };
 
+// Hàm mở chế độ sửa bài viết và đưa dữ liệu cũ lên form
+window.openEditPost = function(postId, title, content, mediaUrl, mediaType, collectionName) {
+    editingPostId = postId;
+    editingCollection = collectionName;
+
+    // Điền dữ liệu cũ vào các ô nhập liệu
+    document.getElementById('admin-title').value = title;
+    document.getElementById('admin-content').value = content;
+    document.getElementById('mediaUrl').value = mediaUrl || '';
+    document.getElementById('mediaType').value = mediaType || 'none';
+
+    // Cuộn màn hình lên đầu trang để admin dễ nhìn form chỉnh sửa
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Đổi tên nút gửi thành Cập nhật
+    const submitBtn = document.querySelector('button[onclick="submitAdminPost()"]');
+    if (submitBtn) submitBtn.innerHTML = "💾 Cập nhật thay đổi";
+};
 window.submitAdminPost = async function() {
     const postType = document.getElementById('admin-post-type').value;
     const title = document.getElementById('admin-title').value.trim();
@@ -1082,53 +1105,73 @@ window.submitAdminPost = async function() {
     }
 
     try {
-        if (postType === 'tin_tuc') {
-            const nguonLink = document.getElementById('admin-source-link')?.value.trim() || '';
-            await addDoc(collection(db, "tin_tuc"), {
+        if (editingPostId && editingCollection) {
+            // --- TRƯỜNG HỢP: CẬP NHẬT BÀI VIẾT CŨ ---
+            const docRef = doc(db, editingCollection, editingPostId);
+            await updateDoc(docRef, {
                 tieuDe: title,
                 noiDung: content,
-                nguonLink: nguonLink,
-                ngayDang: today,
                 mediaUrl: mediaType !== 'none' ? mediaUrl : '',
-    mediaType: mediaType,
+                mediaType: mediaType
             });
-            alert("Đã xuất bản Tin tức thành công lên đám mây!");
-            document.getElementById('admin-source-link').value = "";
-        } 
-        else if (postType === 'tam_su') {
-            await addDoc(collection(db, "tam_su"), {
-                tieuDe: title,
-                noiDung: content,
-                ngayDang: today,
-                mediaUrl: mediaType !== 'none' ? mediaUrl : '',
-    mediaType: mediaType,
-            });
-            alert("Đã xuất bản bài Tâm sự thành công lên đám mây!");
-        } 
-        else if (postType === 'bai_hoc') {
-            const category = document.getElementById('admin-category').value;
-            const tag = document.getElementById('admin-tag').value.trim() || "Thực hành tại nhà";
-            const summary = document.getElementById('admin-summary').value.trim() || content.substring(0, 120) + "...";
             
-            await addDoc(collection(db, "bai_hoc"), {
-                title, category, tag, duration: "Thực hành hàng ngày", summary, content, ngayDang: today,
-                mediaUrl: mediaType !== 'none' ? mediaUrl : '',
-    mediaType: mediaType,
-            });
-            alert("Đã xuất bản bài học mới lên Firebase thành công cho toàn bộ hệ thống!");
-            document.getElementById('admin-summary').value = "";
-            document.getElementById('admin-tag').value = "";
-            loadBaiHocFromFirestore();
+            alert("Cập nhật bài viết thành công!");
+            
+            // Reset trạng thái sửa
+            editingPostId = null;
+            editingCollection = null;
+            const submitBtn = document.querySelector('button[onclick="submitAdminPost()"]');
+            if (submitBtn) submitBtn.innerHTML = "🚀 Xuất bản ngay lên Website";
+
+        } else {
+            // --- TRƯỜNG HỢP: THÊM MỚI ---
+            if (postType === 'tin_tuc') {
+                const nguonLink = document.getElementById('admin-source-link')?.value.trim() || '';
+                await addDoc(collection(db, "tin_tuc"), {
+                    tieuDe: title,
+                    noiDung: content,
+                    nguonLink: nguonLink,
+                    ngayDang: today,
+                    mediaUrl: mediaType !== 'none' ? mediaUrl : '',
+                    mediaType: mediaType
+                });
+                alert("Đã xuất bản Tin tức thành công lên đám mây!");
+                document.getElementById('admin-source-link').value = "";
+            } else if (postType === 'tam_su') {
+                await addDoc(collection(db, "tam_su"), {
+                    tieuDe: title,
+                    noiDung: content,
+                    ngayDang: today,
+                    mediaUrl: mediaType !== 'none' ? mediaUrl : '',
+                    mediaType: mediaType
+                });
+                alert("Đã xuất bản bài Tâm sự thành công lên đám mây!");
+            } else if (postType === 'bai_hoc') {
+                const category = document.getElementById('admin-category').value;
+                const tag = document.getElementById('admin-tag').value.trim() || "Thực hành tại nhà";
+                const summary = document.getElementById('admin-summary').value.trim() || content.substring(0, 120) + "...";
+
+                await addDoc(collection(db, "bai_hoc"), {
+                    title, category, tag, duration: "Thực hành hàng ngày", summary, content, ngayDang: today,
+                    mediaUrl: mediaType !== 'none' ? mediaUrl : '',
+                    mediaType: mediaType
+                });
+                alert("Đã xuất bản bài học mới lên Firebase thành công cho toàn bộ hệ thống!");
+                document.getElementById('admin-summary').value = "";
+                document.getElementById('admin-tag').value = "";
+                if (typeof loadBaiHocFromFirestore === 'function') {
+                    loadBaiHocFromFirestore();
+                }
+            }
         }
 
+        // Reset trắng form sau khi xử lý xong
         document.getElementById('admin-title').value = "";
         document.getElementById('admin-content').value = "";
-        toggleAdminModal();
-        
-        if (postType === 'tin_tuc') loadTinTuc();
-        if (postType === 'tam_su') loadTamSu();
+        document.getElementById('mediaUrl').value = "";
+        document.getElementById('mediaType').value = "none";
 
-    } catch (err) {
-        alert("Lỗi khi kết nối Firebase: " + err.message);
+    } catch (error) {
+        console.error("Lỗi khi xử lý bài viết: ", error);
+        alert("Có lỗi xảy ra, vui lòng kiểm tra lại console.");
     }
-};
