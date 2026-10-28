@@ -1159,9 +1159,6 @@ window.submitAdminPost = async function() {
                 alert("Đã xuất bản bài học mới lên Firebase thành công cho toàn bộ hệ thống!");
                 document.getElementById('admin-summary').value = "";
                 document.getElementById('admin-tag').value = "";
-                if (typeof loadBaiHocFromFirestore === 'function') {
-                    loadBaiHocFromFirestore();
-                }
             }
         }
 
@@ -1170,8 +1167,15 @@ window.submitAdminPost = async function() {
         document.getElementById('admin-content').value = "";
         document.getElementById('mediaUrl').value = "";
         document.getElementById('mediaType').value = "none";
+        toggleAdminModal();
+
+        // Tải lại dữ liệu ngay lập tức để cập nhật giao diện
+        if (postType === 'tin_tuc') loadTinTuc();
+        if (postType === 'tam_su') loadTamSu();
+        if (postType === 'bai_hoc') loadBaiHocFromFirestore();
 
     } catch (error) {
         console.error("Lỗi khi xử lý bài viết: ", error);
-        alert("Có lỗi xảy ra, vui lòng kiểm tra lại console.");
+        alert("Lỗi khi kết nối Firebase: " + error.message);
     }
+};
