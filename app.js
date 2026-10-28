@@ -346,7 +346,7 @@ Khi con đã vui vẻ trở lại, hãy tập cho con: "Khi con cần mẹ → v
 1. Ngắn gọn và Đơn giản: Chỉ nói 1 bước rõ ràng ("Cất xe vào hộp") thay vì câu hỏi dài dòng ("Con có thể làm ơn cất đồ chơi đi được không?").
 2. Phải có sự chú ý trước khi yêu cầu: Lại gần, chạm nhẹ gọi tên đợi con nhìn rồi mới nói, đừng hét vọng từ phòng khác.
 3. Chiến thuật "Đầu tiên – Sau đó" (First – Then): "Đầu tiên cất đồ, sau đó chơi iPad".
-4. Quy tắc 5 giây vàng: Sau khi đưa yêu cầu, hãy im lặng đợi 3–5 giây để não con xử lý thông tin, đừng thúc giục liên hồi.
+4. Quy tắc 5 giây vàng: Sau khi đưa yêu cầu, hãy im lặng đợi 3–5 giây để con xử lý thông tin, đừng thúc giục liên hồi.
 5. Gợi ý khi cần thiết: Nếu sau 5 giây con chưa làm, hãy chỉ tay, làm mẫu hoặc cầm tay hướng dẫn nhẹ nhàng.
 6. Khen ngợi cụ thể ngay lập tức: "Con cất đồ giỏi quá!" ngay khi con vừa hợp tác.
 7. Bình tĩnh và nhất quán khi con từ chối: Dùng giọng trung tính nhắc lại 1 lần và hỗ trợ con hoàn thành, tránh cãi vã.
@@ -636,7 +636,7 @@ Bạn không cần phải hoàn hảo. Bạn không cần phải tận hưởng 
         content: `Làm cha mẹ của một em bé đặc biệt giống như việc cả đời phải bước đi trên vỏ trứng: nhón gót, nín thở, rón rén từng bước một.
 
 • Chúng ta bước trên vỏ trứng khi ở cạnh con: né tránh ti tỉ điều nhỏ nhặt vì sợ đẩy hệ thần kinh vốn đã quá tải của con rơi vào cơn khủng hoảng (meltdown).
-• Chúng ta bước trên vỏ trứng khi làm việc với nhà trường: đọc đi đọc lại một email xin hỗ trợ đến ba lần trước khi nhấn nút "Gửi" vì sợ bị coi là phụ huynh "khó nhằn", sợ ánh nhìn của giáo viên dành cho con sẽ khác đi.
+• Chúng ta bước trên vỏ trứng khi làm việc với nhà trường: đọc đi đọc lại một email xin hỗ trợ đến ba lần trước khi nhấn nút "Gửi" vì sợ bị coi là phụ huynh "khó nhắn", sợ ánh nhìn của giáo viên dành cho con sẽ khác đi.
 
 Điều mệt mỏi nhất là cảm giác chẳng bao giờ có một mặt đất bằng phẳng hoàn toàn để đặt chân xuống. Nếu hôm nay ba mẹ cũng đang cảm thấy sự chênh vênh và rã rời ấy, mẹ Súp muốn ôm ba mẹ thật chặt: Ba mẹ không hề tưởng tượng ra đâu. Bước đi trên vỏ trứng thực sự rất mệt mỏi, và bạn không hề cô đơn trên hành trình này!`
     },
@@ -684,6 +684,7 @@ function searchGuides() {
 
 function renderCards() {
     const container = document.getElementById('guide-container');
+    if (!container) return;
     const keyword = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
     container.innerHTML = '';
 
@@ -710,13 +711,11 @@ function renderCards() {
                         <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">${guide.tag}</span>
                         <span class="text-[11px] text-slate-400 font-medium">${categoryNames[guide.category] || ''}</span>
                     </div>
-                    <!-- Đảm bảo gọi đúng hàm openArticleModal -->
                     <h3 class="text-lg font-bold text-slate-900 mt-3 leading-snug hover:text-teal-700 cursor-pointer" onclick="openArticleModal(${realIndex})">${guide.title}</h3>
                     <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${guide.summary}</p>
                 </div>
                 <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
                     <span>⏱ ${guide.duration}</span>
-                    <!-- Đảm bảo nút bấm gọi đúng hàm openArticleModal -->
                     <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">
                         Đọc chi tiết →
                     </button>
@@ -727,62 +726,32 @@ function renderCards() {
     });
 }
 
-// 3. HÀM MỞ ĐỌC CHI TIẾT BÀI HỌC
-function openArticleModal(realIndex) {
+// 3. HÀM MỞ ĐỌC CHI TIẾT BÀI VIẾT (GẮN GLOBAL ĐỂ HTML GỌI ĐƯỢC)
+window.openArticleModal = function(realIndex) {
     const article = guidesData[realIndex];
+    if (!article) return;
     document.getElementById('modal-tag').innerText = `${article.tag} • ${categoryNames[article.category] || ''}`;
     document.getElementById('modal-title').innerText = article.title;
     document.getElementById('modal-content').innerText = article.content || article.summary;
     document.getElementById('modal-duration').innerText = "⏱ " + article.duration;
     document.getElementById('article-modal').classList.remove('hidden');
-}
+};
 
-function closeArticleModal() {
+window.closeArticleModal = function() {
     document.getElementById('article-modal').classList.add('hidden');
-}
+};
 
 // 4. HÀM QUẢN TRỊ ADMIN: THÊM BÀI HỌC MỚI
-function toggleAdminModal() {
+window.toggleAdminModal = function() {
     document.getElementById('admin-modal').classList.toggle('hidden');
-    document.getElementById('code-export-box').classList.add('hidden');
-}
-
-function addNewPost() {
-    const title = document.getElementById('admin-title').value.trim();
-    const category = document.getElementById('admin-category').value;
-    const tag = document.getElementById('admin-tag').value.trim() || "Can thiệp tại nhà";
-    const duration = document.getElementById('admin-duration').value.trim() || "Thực hành hàng ngày";
-    const summary = document.getElementById('admin-summary').value.trim();
-    const content = document.getElementById('admin-content').value.trim();
-
-    if (!title || !summary || !content) {
-        alert("Vui lòng điền đầy đủ Tiêu đề, Tóm tắt và Nội dung chi tiết của bài học!");
-        return;
-    }
-
-    const newPost = { title, category, tag, summary, duration, content };
-
-    savedPosts.unshift(newPost);
-    localStorage.setItem('lana_custom_posts', JSON.stringify(savedPosts));
-    guidesData = [...savedPosts, ...defaultGuidesData];
-    renderCards();
-
-    const codeString = JSON.stringify(newPost, null, 8) + ",";
-    document.getElementById('generated-code').innerText = codeString;
-    document.getElementById('code-export-box').classList.remove('hidden');
-}
-
-function copyGeneratedCode() {
-    const codeText = document.getElementById('generated-code').innerText;
-    navigator.clipboard.writeText(codeText);
-    alert("Đã copy mã bài viết! Bạn chỉ cần mở file app.js trên GitHub, dán ngay dưới dòng 'const defaultGuidesData = [' và lưu lại.");
-}
+};
 
 // 5. HÀM CHẤM ĐIỂM BẢNG SÀNG LỌC
-function evaluateChecklist() {
+window.evaluateChecklist = function() {
     const checks = document.querySelectorAll('.check-item:checked');
     const count = checks.length;
     const resultBox = document.getElementById('result-box');
+    if (!resultBox) return;
 
     resultBox.classList.remove('hidden', 'bg-amber-50', 'border-amber-300', 'text-amber-900', 'bg-teal-50', 'border-teal-300', 'text-teal-900');
 
@@ -793,89 +762,11 @@ function evaluateChecklist() {
         resultBox.classList.add('bg-teal-50', 'border-teal-300', 'text-teal-900');
         resultBox.innerHTML = `<strong>Ghi nhận (${count}/4 dấu hiệu):</strong> Bạn hãy tiếp tục theo dõi sát các mốc phát triển giao tiếp của con và thực hành các bài tập tương tác hai chiều mỗi ngày.`;
     }
-}
+};
 
-window.onload = () => renderCards(); 
-// 1. Tải danh sách bài tâm sự và lắng nghe bình luận thời gian thực
-import { collection, getDocs, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-async function loadTamSu() {
-  const querySnapshot = await getDocs(collection(db, "tam_su"));
-  const container = document.getElementById("tam-su-container");
-  if (!container) return;
-  container.innerHTML = "";
-
-  querySnapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    const postId = docSnap.id;
-
-    const postElement = document.createElement("div");
-    postElement.className = "tam-su-card";
-    postElement.innerHTML = `
-      <h3>${data.tieuDe}</h3>
-      <p>${data.noiDung}</p>
-      <small>Ngày đăng: ${data.ngayDang}</small>
-      
-      <div class="comments-section" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-        <h4>Bình luận từ phụ huynh</h4>
-        <div id="comments-list-${postId}" class="comments-list"></div>
-        
-        <!-- Khung nhập bình luận -->
-        <div id="comment-form-wrapper-${postId}" style="display: none; margin-top: 10px;">
-          <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." style="width: 100%; height: 60px;"></textarea>
-          <button onclick="guiBinhLuan('${postId}')" style="margin-top: 5px;">Gửi bình luận</button>
-        </div>
-        <p id="login-prompt-${postId}" style="color: gray; font-style: italic;">Vui lòng đăng nhập Google để viết bình luận.</p>
-      </div>
-    `;
-    container.appendChild(postElement);
-    taiBinhLuanRealtime(postId);
-  });
-}
-
-function taiBinhLuanRealtime(postId) {
-  const commentsRef = collection(db, "tam_su", postId, "comments");
-  onSnapshot(commentsRef, (snapshot) => {
-    const listDiv = document.getElementById(`comments-list-${postId}`);
-    if (!listDiv) return;
-    listDiv.innerHTML = "";
-    snapshot.forEach((doc) => {
-      const c = doc.data();
-      listDiv.innerHTML += `
-        <div class="comment-item" style="display: flex; align-items: center; margin-top: 8px;">
-          <img src="${c.anhDaiDien || 'https://via.placeholder.com/30'}" width="30" height="30" style="border-radius: 50%; margin-right: 8px;">
-          <div>
-            <strong>${c.tenNguoiDung}</strong>: <span>${c.noiDungBinhLuan}</span>
-          </div>
-        </div>
-      `;
-    });
-  });
-}
-
-window.guiBinhLuan = async function(postId) {
-  const input = document.getElementById(`comment-input-${postId}`);
-  const noiDung = input.value.trim();
-  if (!noiDung) return;
-
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Bạn cần đăng nhập để bình luận!");
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "tam_su", postId, "comments"), {
-      tenNguoiDung: user.displayName || "Ẩn danh",
-      anhDaiDien: user.photoURL || "",
-      noiDungBinhLuan: noiDung,
-      thoiGian: new Date().toLocaleDateString("vi-VN")
-    });
-    input.value = "";
-  } catch (error) {
-    console.error("Lỗi gửi bình luận: ", error);
-  }
-};// Thêm đoạn này vào cuối file app.js để tải dữ liệu Tin tức và tự động khởi chạy khi trang mở:
+// --- PHẦN KẾT NỐI FIREBASE & BÌNH LUẬN ---
+import { collection, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { auth, db } from "./firebase-config.js"; // Đảm bảo bạn đang import đúng cấu hình khởi tạo db và auth của bạn
 
 async function loadTinTuc() {
   try {
@@ -904,7 +795,91 @@ async function loadTinTuc() {
   }
 }
 
-// Gắn sự kiện tự động chạy khi tải trang
+async function loadTamSu() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "tam_su"));
+    const container = document.getElementById("tam-su-container");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (querySnapshot.empty) {
+      container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài tâm sự nào.</p>`;
+      return;
+    }
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const postId = docSnap.id;
+
+      const postElement = document.createElement("div");
+      postElement.className = "tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-4";
+      postElement.innerHTML = `
+        <h3 class="font-bold text-slate-900 text-lg mb-2">${data.tieuDe || ''}</h3>
+        <p class="text-slate-700 mb-3">${data.noiDung || ''}</p>
+        <small class="text-slate-400">Ngày đăng: ${data.ngayDang || ''}</small>
+        
+        <div class="comments-section mt-4 pt-3 border-t border-slate-100">
+          <h4 class="font-semibold text-sm text-slate-800 mb-2">Bình luận từ phụ huynh</h4>
+          <div id="comments-list-${postId}" class="comments-list space-y-2"></div>
+          
+          <div id="comment-form-wrapper-${postId}" style="display: none;" class="mt-3">
+            <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2 text-sm mb-2"></textarea>
+            <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700">Gửi bình luận</button>
+          </div>
+          <p id="login-prompt-${postId}" class="text-gray-400 text-xs italic mt-2">Vui lòng đăng nhập Google để viết bình luận.</p>
+        </div>
+      `;
+      container.appendChild(postElement);
+      taiBinhLuanRealtime(postId);
+    });
+  } catch (error) {
+    console.error("Lỗi tải tâm sự: ", error);
+  }
+}
+
+function taiBinhLuanRealtime(postId) {
+  const commentsRef = collection(db, "tam_su", postId, "comments");
+  onSnapshot(commentsRef, (snapshot) => {
+    const listDiv = document.getElementById(`comments-list-${postId}`);
+    if (!listDiv) return;
+    listDiv.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const c = doc.data();
+      listDiv.innerHTML += `
+        <div class="comment-item flex items-center text-sm">
+          <img src="${c.anhDaiDien || 'https://via.placeholder.com/30'}" width="28" height="28" class="rounded-full mr-2">
+          <div><strong>${c.tenNguoiDung}</strong>: <span class="text-slate-600">${c.noiDungBinhLuan}</span></div>
+        </div>
+      `;
+    });
+  });
+}
+
+window.guiBinhLuan = async function(postId) {
+  const input = document.getElementById(`comment-input-${postId}`);
+  const noiDung = input.value.trim();
+  if (!noiDung) return;
+
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Bạn cần đăng nhập để bình luận!");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "tam_su", postId, "comments"), {
+      tenNguoiDung: user.displayName || "Ẩn danh",
+      anhDaiDien: user.photoURL || "",
+      noiDungBinhLuan: noiDung,
+      thoiGian: new Date().toLocaleDateString("vi-VN")
+    });
+    input.value = "";
+  } catch (error) {
+    console.error("Lỗi gửi bình luận: ", error);
+  }
+};
+
+// MỘT ĐẦU MỐI DUY NHẤT KHỞI CHẠY KHI TẢI TRANG
 window.onload = () => {
     renderCards();
     loadTinTuc();
