@@ -720,9 +720,9 @@ function renderCards() {
         const rawText = guide.summary || guide.content || '';
         const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
 
-        // Xử lý nút Sửa bài học (nếu bài viết trên Firebase có id thì dùng id, nếu không dùng chỉ số index hoặc rỗng)
-        const postIdParam = guide.id || 'bai_hoc_' + realIndex;
-        const editBtnHtml = isAdmin ? `<button onclick="openEditPost('${postIdParam}', '${encodeURIComponent(guide.title)}', '${encodeURIComponent(guide.content || guide.summary)}', '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
+        // Xử lý nút Sửa bài học
+        const postIdParam = guide.id || '';
+        const editBtnHtml = (isAdmin && guide.id) ? `<button onclick="openEditPost('${postIdParam}', '${encodeURIComponent(guide.title)}', '${encodeURIComponent(guide.content || guide.summary)}', '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
 
         const card = `
            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
@@ -850,7 +850,9 @@ async function loadBaiHocFromFirestore() {
         const querySnapshot = await getDocs(collection(db, "bai_hoc"));
         firestoreGuidesData = [];
         querySnapshot.forEach((docSnap) => {
-            firestoreGuidesData.push(docSnap.data());
+            const data = docSnap.data();
+            data.id = docSnap.id; // Lấy đúng ID trên Firebase
+            firestoreGuidesData.push(data);
         });
         guidesData = [...firestoreGuidesData, ...savedPosts, ...defaultGuidesData];
         renderCards();
