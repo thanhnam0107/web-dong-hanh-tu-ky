@@ -705,7 +705,6 @@ function renderCards() {
         return;
     }
 
-    // Kiểm tra xem người đang xem có phải Admin không
     const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
 
     filtered.forEach((guide) => {
@@ -721,8 +720,9 @@ function renderCards() {
         const rawText = guide.summary || guide.content || '';
         const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
 
-        // Chỉ tạo nút Sửa nếu là Admin (và mã hóa nội dung bằng encodeURIComponent)
-        const editBtnHtml = isAdmin ? `<button onclick="openEditPost('${guide.id || ''}', '${encodeURIComponent(guide.title)}', '${encodeURIComponent(guide.content || guide.summary)}', '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
+        // Xử lý nút Sửa bài học (nếu bài viết trên Firebase có id thì dùng id, nếu không dùng chỉ số index hoặc rỗng)
+        const postIdParam = guide.id || 'bai_hoc_' + realIndex;
+        const editBtnHtml = isAdmin ? `<button onclick="openEditPost('${postIdParam}', '${encodeURIComponent(guide.title)}', '${encodeURIComponent(guide.content || guide.summary)}', '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
 
         const card = `
            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
@@ -747,53 +747,6 @@ function renderCards() {
         container.innerHTML += card;
     });
 }
-
-window.openArticleModal = function(realIndex) {
-    const article = guidesData[realIndex];
-    if (!article) return;
-    document.getElementById('modal-tag').innerText = `${article.tag || 'Bài học'} • ${categoryNames[article.category] || ''}`;
-    document.getElementById('modal-title').innerText = article.title;
-    document.getElementById('modal-content').innerText = article.content || article.summary;
-    document.getElementById('modal-duration').innerText = "⏱ " + (article.duration || "Thực hành hàng ngày");
-    document.getElementById('article-modal').classList.remove('hidden');
-};
-
-window.openTinTucModal = function(index) {
-    const item = tinTucData[index];
-    if (!item) return;
-    document.getElementById('modal-tag').innerText = "📰 Tin tức & Nghiên cứu học thuật";
-    document.getElementById('modal-title').innerText = item.tieuDe || item.tieude || '';
-    
-    let fullHtml = item.noiDung || '';
-    if (item.nguonLink) {
-        fullHtml += `\n\n-------------------\n🔗 Đường link nguồn gốc chuẩn bản quyền:\n${item.nguonLink}`;
-    }
-    
-    document.getElementById('modal-content').innerText = fullHtml;
-    document.getElementById('modal-duration').innerText = "📅 Ngày đăng: " + (item.ngayDang || '');
-    document.getElementById('article-modal').classList.remove('hidden');
-};
-
-window.closeArticleModal = function() {
-    document.getElementById('article-modal').classList.add('hidden');
-};
-
-window.evaluateChecklist = function() {
-    const checks = document.querySelectorAll('.check-item:checked');
-    const count = checks.length;
-    const resultBox = document.getElementById('result-box');
-    if (!resultBox) return;
-
-    resultBox.classList.remove('hidden', 'bg-amber-50', 'border-amber-300', 'text-amber-900', 'bg-teal-50', 'border-teal-300', 'text-teal-900');
-
-    if (count >= 2) {
-        resultBox.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-900');
-        resultBox.innerHTML = `<strong>Khuyến nghị ưu tiên (${count}/4 dấu hiệu):</strong> Trẻ đang có một số dấu hiệu cần lưu ý về giao tiếp xã hội và chú ý chung. Bố mẹ nên bắt đầu áp dụng ngay các bài học trong mục "Giao tiếp & Ngôn ngữ" bên trên và đưa trẻ đi đánh giá phát triển chuyên sâu.`;
-    } else {
-        resultBox.classList.add('bg-teal-50', 'border-teal-300', 'text-teal-900');
-        resultBox.innerHTML = `<strong>Ghi nhận (${count}/4 dấu hiệu):</strong> Bạn hãy tiếp tục theo dõi sát các mốc phát triển giao tiếp của con và thực hành các bài tập tương tác hai chiều mỗi ngày.`;
-    }
-};
 
 // =========================================================================
 // KẾT NỐI FIREBASE & QUẢN TRỊ ĐÁM MÂY
