@@ -792,7 +792,7 @@ window.evaluateChecklist = function() {
 // KẾT NỐI FIREBASE & QUẢN TRỊ ĐÁM MÂY
 // =========================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -916,7 +916,9 @@ async function loadTinTuc() {
 
         tinTucData = [];
         querySnapshot.forEach((docSnap) => {
-            tinTucData.push(docSnap.data());
+            const item = docSnap.data();
+            item.id = docSnap.id;
+            tinTucData.push(item);
         });
 
         tinTucData.forEach((item, index) => {
@@ -937,7 +939,7 @@ async function loadTinTuc() {
                         <button onclick="openTinTucModal(${index})" class="text-teal-600 font-semibold text-xs hover:underline">
                             Đọc chi tiết →
                         </button>
-                        <button onclick="openEditPost('${docSnap.id}', '${item.tieuDe || ''}', \`${item.noiDung || ''}\`, '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tin_tuc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
+                        <button onclick="openEditPost('${item.id}', '${item.tieuDe || ''}', \`${item.noiDung || ''}\`, '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tin_tuc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
                     </div>
                 </div>
             `;
@@ -981,7 +983,7 @@ async function loadTamSu() {
                         <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">
                             Gửi bình luận
                         </button>
-                        <button onclick="openEditPost('${docSnap.id}', '${item.tieuDe || ''}', \`${item.noiDung || ''}\`, '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tam_su')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
+                        <button onclick="openEditPost('${postId}', '${tieuDe}', \`${data.noiDung || ''}\`, '${data.mediaUrl || ''}', '${data.mediaType || 'none'}', 'tam_su')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
                     </div>
                     <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
                         🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (chống spam).
