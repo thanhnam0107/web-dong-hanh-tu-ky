@@ -1,4 +1,6 @@
-// KHO DỮ LIỆU 35 BÀI HỌC & CHIA SẺ TỪ MẸ LANA & BÉ SÚP
+// =========================================================================
+// KHO 35 BÀI HỌC & CHIA SẺ TỪ MẸ LANA & BÉ SÚP
+// =========================================================================
 const defaultGuidesData = [
     // --- CHUYÊN MỤC 1: HIỂU ĐÚNG VỀ TỰ KỶ & KHOA HỌC (nen-tang) ---
     {
@@ -61,7 +63,7 @@ CHA MẸ NÊN XỬ LÝ THẾ NÀO KHI CON "LƯƠN"?
 
 Chiều nay đi đón Súp, trời nắng như đổ lửa, mẹ tới cửa lớp mồ hôi nhễ nhại. Súp chạy ào ra chào mẹ, khi ngước lên nhìn khuôn mặt mẹ, con bỗng nói: "Mẹ toát mồ hôi", rồi lẳng lặng lấy giấy, vươn bàn tay bé xíu, nhón chân lên lau giọt mồ hôi đang lăn trên trán mẹ. Khoảnh khắc ấy, tim mẹ như đánh rơi một nhịp.
 
-Cha mẹ cần phân biệt rất rõ giữa "Khả năng thấu cảm" và "Khả năng thể hiện sự thấu cảm". Trẻ đặc biệt KHÔNG hề vô cảm. Cái khó của các con nằm ở:
+Cha mẹ cần phân biệt rất rõ giữa "Khả năng thấu cảm" và "Khả năng thể hiện sự thấu cảm". Trẻ đặc biệt KH hề vô cảm. Cái khó của các con nằm ở:
 1. Khó khăn trong việc đọc "tín hiệu xã hội": Con khó phân tích biểu cảm khuôn mặt, ngôn ngữ cơ thể hay giọng điệu phức tạp của người đối diện.
 2. Khó khăn trong khâu "Phản hồi": Ngay cả khi nhận ra mẹ đang buồn hay đau, não bộ của con lại loay hoay không biết phải sử dụng lời nói hay hành động gì cho "đúng chuẩn mực xã hội".
 3. Quá tải cảm xúc: Đôi khi cảm nhận nỗi buồn hay sự căng thẳng của người khác khiến hệ thần kinh của con bị quá tải, dẫn đến lảng tránh hoặc bịt tai để tự xoa dịu.
@@ -95,7 +97,7 @@ Thước đo của một nền giáo dục nhân văn không phải là liệu m
 
 Tại sao việc dùng đúng tay thuận lại cực kỳ quan trọng với trẻ tự kỷ?
 1. Bài toán về "Tải trọng nhận thức" (Cognitive Load):
-Nhiều trẻ tự kỷ gặp khó khăn về vận động tinh và lập kế hoạch vận động. Để cắt một tờ giấy hay viết một nét chữ, não bộ của con đã phải nỗ lực gấp nhiều lần để phối hợp tay - mắt. Nếu bắt con dùng tay không thuận, não bộ phải gánh thêm áp lực khổng lồ: vừa học kỹ năng mới, vừa gồng mình điều khiển cái tay "lóng ngóng", dễ dẫn đến ức chế và né tránh nhiệm vụ.
+Nhiều trẻ tự kỷ gặp khó khăn về vận động tinh và lập kế hoạch vận động. Để cắt một tờ giấy hay viết một nét chữ, não bộ của con đã phải nỗ lực gấp nhiều lần để phối hợp tay - mắt. Nếu bắt con dùng tay không thuận, não bộ phải gánh thêm áp lực khổng lồ: vừa học kỹ năng mới, vừa gồng mình điều khiển cái tay "lóng ngóng", dẫn đến ức chế và né tránh nhiệm vụ.
 
 2. Tôn trọng thiết kế thần kinh:
 Sự thuận tay liên quan mật thiết đến sự phân hóa bán cầu não (lateralization). Khi được dùng đúng tay trái, Súp trở nên tự tin hơn hẳn, hào hứng cầm kéo cắt giấy thuần thục hơn rất nhiều. Hành trình làm cha mẹ của trẻ đặc biệt là hành trình "tháo dỡ" những kỳ vọng thông thường để thấu hiểu thế giới của con.`
@@ -654,12 +656,10 @@ Nhưng sự thật là: Hai điều đó hoàn toàn có thể xảy ra cùng m�
     }
 ];
 
-// =========================================================================
-// PHẦN XỬ LÝ HIỂN THỊ 35 BÀI HỌC, ĐĂNG NHẬP GOOGLE, ADMIN & FIREBASE
-// =========================================================================
-
 let savedPosts = JSON.parse(localStorage.getItem('lana_custom_posts')) || [];
-let guidesData = [...savedPosts, ...defaultGuidesData];
+let firestoreGuidesData = [];
+let guidesData = [];
+let tinTucData = [];
 let currentCategoryFilter = 'all';
 
 const categoryNames = {
@@ -670,7 +670,6 @@ const categoryNames = {
     'tam-su': '💛 Nhật ký Mẹ Súp & Tâm lý Cha mẹ'
 };
 
-// 1. GẮN TOÀN BỘ HÀM GIAO DIỆN VÀO WINDOW ĐỂ HTML GỌI ĐƯỢC TRONG MODULE
 window.filterGuides = function(selectedCategory, btnElement = null) {
     currentCategoryFilter = selectedCategory;
     if (btnElement) {
@@ -706,7 +705,6 @@ function renderCards() {
 
     filtered.forEach((guide) => {
         const realIndex = guidesData.indexOf(guide);
-        // Rút gọn nội dung (substring 150 ký tự) kèm nút Đọc tiếp
         const rawText = guide.summary || guide.content || '';
         const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
 
@@ -732,7 +730,6 @@ function renderCards() {
     });
 }
 
-// 2. MỞ / ĐÓNG CỬA SỔ ĐỌC CHI TIẾT BÀI HỌC
 window.openArticleModal = function(realIndex) {
     const article = guidesData[realIndex];
     if (!article) return;
@@ -743,11 +740,26 @@ window.openArticleModal = function(realIndex) {
     document.getElementById('article-modal').classList.remove('hidden');
 };
 
+window.openTinTucModal = function(index) {
+    const item = tinTucData[index];
+    if (!item) return;
+    document.getElementById('modal-tag').innerText = "📰 Tin tức & Nghiên cứu học thuật";
+    document.getElementById('modal-title').innerText = item.tieuDe || item.tieude || '';
+    
+    let fullHtml = item.noiDung || '';
+    if (item.nguonLink) {
+        fullHtml += `\n\n-------------------\n🔗 Đường link nguồn gốc chuẩn bản quyền:\n${item.nguonLink}`;
+    }
+    
+    document.getElementById('modal-content').innerText = fullHtml;
+    document.getElementById('modal-duration').innerText = "📅 Ngày đăng: " + (item.ngayDang || '');
+    document.getElementById('article-modal').classList.remove('hidden');
+};
+
 window.closeArticleModal = function() {
     document.getElementById('article-modal').classList.add('hidden');
 };
 
-// 3. BẢNG SÀNG LỌC NHANH
 window.evaluateChecklist = function() {
     const checks = document.querySelectorAll('.check-item:checked');
     const count = checks.length;
@@ -765,17 +777,13 @@ window.evaluateChecklist = function() {
     }
 };
 
-// 4. HIỂN THỊ NGAY 35 BÀI HỌC TRƯỚC KHI KẾT NỐI FIREBASE
-renderCards();
-
 // =========================================================================
-// 5. KẾT NỐI FIREBASE, ĐĂNG NHẬP GOOGLE & PHÂN QUYỀN ADMIN
+// KẾT NỐI FIREBASE & QUẢN TRỊ ĐÁM MÂY
 // =========================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// THAY THÔNG SỐ CẤU HÌNH FIREBASE CỦA DỰ ÁNcongdongtukyvn VÀO ĐÂY:
 const firebaseConfig = {
     apiKey: "AIzaSyAEt6SYdblkSP1IMWDREzr70-i7LW1MGxw",
     authDomain: "congdongtukyvn.firebaseapp.com",
@@ -786,7 +794,6 @@ const firebaseConfig = {
     measurementId: "G-21DSZYZ6X5"
 };
 
-// DANH SÁCH EMAIL ADMIN ĐƯỢC QUYỀN ĐĂNG BÀI TRỰC TIẾP (Thay email của bạn vào đây):
 const ADMIN_EMAILS = [
     "thanhnam0107@gmail.com",
     "phunglananh@gmail.com"
@@ -802,21 +809,18 @@ try {
     auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Hàm Đăng nhập Google
     window.dangNhapGoogle = async function() {
         try {
             await signInWithPopup(auth, provider);
         } catch (err) {
-            alert("Không thể đăng nhập Google. Vui lòng kiểm tra cấu hình Firebase Auth: " + err.message);
+            alert("Lỗi đăng nhập Google: " + err.message);
         }
     };
 
-    // Hàm Đăng xuất
     window.dangXuatGoogle = async function() {
         await signOut(auth);
     };
 
-    // Lắng nghe trạng thái đăng nhập để ẩn/hiện khung bình luận và nút Admin
     onAuthStateChanged(auth, (user) => {
         currentUser = user;
         const loginBtn = document.getElementById('login-btn');
@@ -832,7 +836,6 @@ try {
             document.getElementById('user-avatar').src = user.photoURL || 'https://via.placeholder.com/30';
             document.getElementById('user-name').innerText = user.displayName || user.email;
 
-            // Kiểm tra quyền Admin: nếu email nằm trong ADMIN_EMAILS thì hiện nút Quản trị
             if (ADMIN_EMAILS.includes(user.email)) {
                 adminBtn?.classList.remove('hidden');
             } else {
@@ -845,15 +848,16 @@ try {
             userInfo?.classList.remove('flex');
             adminBtn?.classList.add('hidden');
         }
-
-        // Cập nhật ẩn/hiện khung nhập bình luận cho tất cả bài Tâm sự
         capNhatKhungBinhLuan();
     });
 
+    loadBaiHocFromFirestore();
     loadTinTuc();
     loadTamSu();
 } catch (e) {
-    console.warn("Firebase chưa cấu hình đầy đủ, hệ thống vẫn chạy 35 bài học bình thường:", e);
+    console.warn("Chưa cấu hình Firebase đầy đủ, chạy kho bài học mẫu cục bộ:", e);
+    guidesData = [...savedPosts, ...defaultGuidesData];
+    renderCards();
 }
 
 function capNhatKhungBinhLuan() {
@@ -865,7 +869,27 @@ function capNhatKhungBinhLuan() {
     });
 }
 
-// 6. TẢI TIN TỨC TỪ FIREBASE
+async function loadBaiHocFromFirestore() {
+    if (!db) {
+        guidesData = [...savedPosts, ...defaultGuidesData];
+        renderCards();
+        return;
+    }
+    try {
+        const querySnapshot = await getDocs(collection(db, "bai_hoc"));
+        firestoreGuidesData = [];
+        querySnapshot.forEach((docSnap) => {
+            firestoreGuidesData.push(docSnap.data());
+        });
+        guidesData = [...firestoreGuidesData, ...savedPosts, ...defaultGuidesData];
+        renderCards();
+    } catch (e) {
+        console.warn("Lỗi tải bài học từ Firebase:", e);
+        guidesData = [...savedPosts, ...defaultGuidesData];
+        renderCards();
+    }
+}
+
 async function loadTinTuc() {
     if (!db) return;
     try {
@@ -879,17 +903,29 @@ async function loadTinTuc() {
             return;
         }
 
+        tinTucData = [];
         querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            const fullText = data.noiDung || '';
+            tinTucData.push(docSnap.data());
+        });
+
+        tinTucData.forEach((item, index) => {
+            const fullText = item.noiDung || '';
             const shortText = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
+            const sourceBadge = item.nguonLink ? `<a href="${item.nguonLink}" target="_blank" rel="noopener noreferrer" class="text-xs text-teal-600 hover:underline inline-flex items-center gap-1 mt-2">🔗 Có đính kèm link nguồn gốc chuẩn bản quyền</a>` : '';
 
             container.innerHTML += `
                 <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <span class="text-xs text-teal-700 font-semibold">📅 ${data.ngayDang || ''}</span>
-                        <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2">${data.tieuDe || data.tieude || ''}</h3>
+                        <span class="text-xs text-teal-700 font-semibold">📅 ${item.ngayDang || ''}</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2 cursor-pointer hover:text-teal-700" onclick="openTinTucModal(${index})">${item.tieuDe || item.tieude || ''}</h3>
                         <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-line">${shortText}</p>
+                        ${sourceBadge}
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Tin tức khoa học</span>
+                        <button onclick="openTinTucModal(${index})" class="text-teal-600 font-semibold text-xs hover:underline">
+                            Đọc chi tiết →
+                        </button>
                     </div>
                 </div>
             `;
@@ -899,7 +935,6 @@ async function loadTinTuc() {
     }
 }
 
-// 7. TẢI TÂM SỰ & BÌNH LUẬN THỜI GIAN THỰC (CHẶN SPAM BẰNG GOOGLE AUTH)
 async function loadTamSu() {
     if (!db) return;
     try {
@@ -929,16 +964,14 @@ async function loadTamSu() {
                     <h4 class="font-semibold text-sm text-slate-800 mb-2">💬 Bình luận từ phụ huynh</h4>
                     <div id="comments-list-${postId}" class="comments-list space-y-2 mb-3"></div>
                     
-                    <!-- Khung nhập bình luận: Mặc định ẩn, chỉ hiện khi đã đăng nhập Google -->
                     <div id="comment-form-wrapper-${postId}" class="comment-form-box mt-3" style="display: ${currentUser ? 'block' : 'none'};">
                         <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm mb-2 focus:outline-none focus:border-teal-600"></textarea>
                         <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">
                             Gửi bình luận
                         </button>
                     </div>
-                    <!-- Thông báo yêu cầu đăng nhập -->
                     <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
-                        🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (nhằm định danh và chặn spam).
+                        🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (chống spam).
                     </p>
                 </div>
             `;
@@ -980,7 +1013,7 @@ function taiBinhLuanRealtime(postId) {
 window.guiBinhLuan = async function(postId) {
     const input = document.getElementById(`comment-input-${postId}`);
     if (!input) return;
-    const noiDung = input.value.trim(); // Đã sửa lỗi chính tả noiDunn -> noiDung
+    const noiDung = input.value.trim();
     if (!noiDung) return;
 
     if (!currentUser) {
@@ -1001,7 +1034,6 @@ window.guiBinhLuan = async function(postId) {
     }
 };
 
-// 8. QUẢN TRỊ ADMIN: ĐĂNG TIN TỨC / TÂM SỰ TRỰC TIẾP LÊN FIREBASE
 window.toggleAdminModal = function() {
     document.getElementById('admin-modal').classList.toggle('hidden');
 };
@@ -1009,10 +1041,17 @@ window.toggleAdminModal = function() {
 window.toggleAdminFields = function() {
     const postType = document.getElementById('admin-post-type').value;
     const extraFields = document.getElementById('admin-guide-extra');
+    const newsExtra = document.getElementById('admin-news-extra');
+    
     if (postType === 'bai_hoc') {
-        extraFields.classList.remove('hidden');
+        extraFields?.classList.remove('hidden');
+        newsExtra?.classList.add('hidden');
+    } else if (postType === 'tin_tuc') {
+        extraFields?.classList.add('hidden');
+        newsExtra?.classList.remove('hidden');
     } else {
-        extraFields.classList.add('hidden');
+        extraFields?.classList.add('hidden');
+        newsExtra?.classList.add('hidden');
     }
 };
 
@@ -1027,37 +1066,53 @@ window.submitAdminPost = async function() {
         return;
     }
 
-    if (postType === 'tin_tuc' || postType === 'tam_su') {
-        if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) {
-            alert("Chỉ tài khoản Admin mới có quyền đăng trực tiếp lên hệ thống!");
-            return;
-        }
-        try {
-            await addDoc(collection(db, postType), {
+    if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) {
+        alert("Chỉ tài khoản Admin chính chủ mới có quyền đăng bài!");
+        return;
+    }
+
+    try {
+        if (postType === 'tin_tuc') {
+            const nguonLink = document.getElementById('admin-source-link')?.value.trim() || '';
+            await addDoc(collection(db, "tin_tuc"), {
+                tieuDe: title,
+                noiDung: content,
+                nguonLink: nguonLink,
+                ngayDang: today
+            });
+            alert("Đã xuất bản Tin tức thành công lên đám mây!");
+            document.getElementById('admin-source-link').value = "";
+        } 
+        else if (postType === 'tam_su') {
+            await addDoc(collection(db, "tam_su"), {
                 tieuDe: title,
                 noiDung: content,
                 ngayDang: today
             });
-            alert("Đã xuất bản bài viết thành công lên đám mây!");
-            document.getElementById('admin-title').value = "";
-            document.getElementById('admin-content').value = "";
-            toggleAdminModal();
-            if (postType === 'tin_tuc') loadTinTuc();
-            if (postType === 'tam_su') loadTamSu();
-        } catch (err) {
-            alert("Lỗi khi đăng lên Firebase: " + err.message);
+            alert("Đã xuất bản bài Tâm sự thành công lên đám mây!");
+        } 
+        else if (postType === 'bai_hoc') {
+            const category = document.getElementById('admin-category').value;
+            const tag = document.getElementById('admin-tag').value.trim() || "Thực hành tại nhà";
+            const summary = document.getElementById('admin-summary').value.trim() || content.substring(0, 120) + "...";
+            
+            await addDoc(collection(db, "bai_hoc"), {
+                title, category, tag, duration: "Thực hành hàng ngày", summary, content, ngayDang: today
+            });
+            alert("Đã xuất bản bài học mới lên Firebase thành công cho toàn bộ hệ thống!");
+            document.getElementById('admin-summary').value = "";
+            document.getElementById('admin-tag').value = "";
+            loadBaiHocFromFirestore();
         }
-    } else {
-        // Lưu bài học mới
-        const category = document.getElementById('admin-category').value;
-        const tag = document.getElementById('admin-tag').value.trim() || "Thực hành tại nhà";
-        const summary = document.getElementById('admin-summary').value.trim() || content.substring(0, 120) + "...";
-        const newGuide = { title, category, tag, duration: "Thực hành hàng ngày", summary, content };
-        savedPosts.unshift(newGuide);
-        localStorage.setItem('lana_custom_posts', JSON.stringify(savedPosts));
-        guidesData = [...savedPosts, ...defaultGuidesData];
-        renderCards();
+
+        document.getElementById('admin-title').value = "";
+        document.getElementById('admin-content').value = "";
         toggleAdminModal();
-        alert("Đã thêm bài học mới vào Thư viện!");
+        
+        if (postType === 'tin_tuc') loadTinTuc();
+        if (postType === 'tam_su') loadTamSu();
+
+    } catch (err) {
+        alert("Lỗi khi kết nối Firebase: " + err.message);
     }
 };
