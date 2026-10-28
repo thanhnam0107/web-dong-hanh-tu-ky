@@ -265,25 +265,32 @@
         <p>© 2026 Đồng Hành Cùng Con - Sáng lập bởi Lana (MSc Psychology Candidate, CityU Hong Kong).</p>
     </footer>
 
-    <script // Ví dụ đoạn mã xử lý hiển thị bài viết trên trang chủ của bạn
-function hienThiTrangChu(danhSachBaiViet) {
-  const container = document.getElementById("home-posts-container");
-  container.innerHTML = "";
+    <!-- Thẻ chứa hiển thị bài viết trang chủ -->
+    <div id="home-posts-container"></div>
 
-  danhSachBaiViet.forEach(post => {
-    // Dùng hàm cắt chuỗi để rút gọn nội dung hiển thị trang 1
-    const shortContent = post.content.length > 150 
-      ? post.content.substring(0, 150) + "..." 
-      : post.content;
+    <script>
+    // Ví dụ đoạn mã xử lý hiển thị bài viết trên trang chủ của bạn
+    function hienThiTrangChu(danhSachBaiViet) {
+      const container = document.getElementById("home-posts-container");
+      if (!container) return;
+      container.innerHTML = "";
 
-    container.innerHTML += `
-      <div class="post-item">
-        <h2>${post.title}</h2>
-        <p>${shortContent}</p>
-        <button onclick="xemChiTiet('${post.id}')">Đọc tiếp</button>
-      </div>
-    `;
-  });
-}</script>
+      danhSachBaiViet.forEach(post => {
+        // Dùng hàm cắt chuỗi để rút gọn nội dung hiển thị trang 1
+        const shortContent = post.content.length > 150 
+          ? post.content.substring(0, 150) + "..." 
+          : post.content;
+
+        container.innerHTML += `
+          <div class="post-item bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <h2 class="font-bold text-slate-900 text-lg mb-2">${post.title}</h2>
+            <p class="text-slate-600 text-sm mb-4">${shortContent}</p>
+            <button onclick="xemChiTiet('${post.id}')" class="text-teal-600 font-semibold text-sm hover:underline">Đọc tiếp &rarr;</button>
+          </div>
+        `;
+      });
+    }
+    </script>
 </body>
+</html>
 </html>
