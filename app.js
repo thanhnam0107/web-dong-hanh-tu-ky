@@ -705,17 +705,24 @@ function renderCards() {
         return;
     }
 
-    filtered.forEach((guide) => {let mediaHtml = '';
-    if (guide.mediaUrl && guide.mediaUrl !== '') {
-        if (guide.mediaType === 'image') {
-            mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
-        } else if (guide.mediaType === 'video') {
-            mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${guide.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+    // Kiểm tra xem người đang xem có phải Admin không
+    const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+
+    filtered.forEach((guide) => {
+        let mediaHtml = '';
+        if (guide.mediaUrl && guide.mediaUrl !== '') {
+            if (guide.mediaType === 'image') {
+                mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
+            } else if (guide.mediaType === 'video') {
+                mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${guide.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+            }
         }
-    }
         const realIndex = guidesData.indexOf(guide);
         const rawText = guide.summary || guide.content || '';
         const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
+
+        // Chỉ tạo nút Sửa nếu là Admin (và mã hóa nội dung bằng encodeURIComponent)
+        const editBtnHtml = isAdmin ? `<button onclick="openEditPost('${guide.id || ''}', '${encodeURIComponent(guide.title)}', '${encodeURIComponent(guide.content || guide.summary)}', '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
 
         const card = `
            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
@@ -733,7 +740,7 @@ function renderCards() {
                     <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">
                         Đọc tiếp →
                     </button>
-                    <button onclick="openEditPost('${guide.id || ''}', '${guide.title}', \`${guide.content || guide.summary}\`, '${guide.mediaUrl || ''}', '${guide.mediaType || 'none'}', 'bai_hoc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>
+                    ${editBtnHtml}
                 </div>
             </div>
         `;
@@ -921,10 +928,14 @@ async function loadTinTuc() {
             tinTucData.push(item);
         });
 
+        const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+
         tinTucData.forEach((item, index) => {
             const fullText = item.noiDung || '';
             const shortText = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
             const sourceBadge = item.nguonLink ? `<a href="${item.nguonLink}" target="_blank" rel="noopener noreferrer" class="text-xs text-teal-600 hover:underline inline-flex items-center gap-1 mt-2">🔗 Có đính kèm link nguồn gốc chuẩn bản quyền</a>` : '';
+
+            const editBtnHtml = isAdmin ? `<button onclick="openEditPost('${item.id}', '${encodeURIComponent(item.tieuDe || item.tieude || '')}', '${encodeURIComponent(item.noiDung || '')}', '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tin_tuc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>` : '';
 
             container.innerHTML += `
                 <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -939,7 +950,7 @@ async function loadTinTuc() {
                         <button onclick="openTinTucModal(${index})" class="text-teal-600 font-semibold text-xs hover:underline">
                             Đọc chi tiết →
                         </button>
-                        <button onclick="openEditPost('${item.id}', '${item.tieuDe || ''}', \`${item.noiDung || ''}\`, '${item.mediaUrl || ''}', '${item.mediaType || 'none'}', 'tin_tuc')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
+                        ${editBtnHtml}
                     </div>
                 </div>
             `;
@@ -962,6 +973,8 @@ async function loadTamSu() {
             return;
         }
 
+        const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const postId = docSnap.id;
@@ -969,6 +982,9 @@ async function loadTamSu() {
 
             const postElement = document.createElement("div");
             postElement.className = "tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm";
+            
+            const editBtnHtml = isAdmin ? `<button onclick="openEditPost('${postId}', '${encodeURIComponent(tieuDe)}', '${encodeURIComponent(data.noiDung || '')}', '${data.mediaUrl || ''}', '${data.mediaType || 'none'}', 'tam_su')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>` : '';
+
             postElement.innerHTML = `
                 <h3 class="font-bold text-slate-900 text-lg mb-2">${tieuDe}</h3>
                 <p class="text-slate-700 mb-3 whitespace-pre-line leading-relaxed">${data.noiDung || ''}</p>
@@ -983,7 +999,7 @@ async function loadTamSu() {
                         <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">
                             Gửi bình luận
                         </button>
-                        <button onclick="openEditPost('${postId}', '${tieuDe}', \`${data.noiDung || ''}\`, '${data.mediaUrl || ''}', '${data.mediaType || 'none'}', 'tam_su')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>
+                        ${editBtnHtml}
                     </div>
                     <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
                         🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (chống spam).
@@ -1071,18 +1087,25 @@ window.toggleAdminFields = function() {
 };
 
 // Hàm mở chế độ sửa bài viết và đưa dữ liệu cũ lên form
-window.openEditPost = function(postId, title, content, mediaUrl, mediaType, collectionName) {
+window.openEditPost = function(postId, encTitle, encContent, mediaUrl, mediaType, collectionName) {
     editingPostId = postId;
     editingCollection = collectionName;
 
-    // Điền dữ liệu cũ vào các ô nhập liệu
-    document.getElementById('admin-title').value = title;
-    document.getElementById('admin-content').value = content;
+    // Giải mã (decode) và điền dữ liệu cũ vào form
+    document.getElementById('admin-title').value = decodeURIComponent(encTitle);
+    document.getElementById('admin-content').value = decodeURIComponent(encContent);
     document.getElementById('mediaUrl').value = mediaUrl || '';
     document.getElementById('mediaType').value = mediaType || 'none';
 
-    // Cuộn màn hình lên đầu trang để admin dễ nhìn form chỉnh sửa
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Đổi đúng category trên form
+    const postTypeSelect = document.getElementById('admin-post-type');
+    if (postTypeSelect) {
+        postTypeSelect.value = collectionName;
+        toggleAdminFields();
+    }
+
+    // HIỂN THỊ POPUP ADMIN LÊN MÀN HÌNH
+    document.getElementById('admin-modal').classList.remove('hidden');
     
     // Đổi tên nút gửi thành Cập nhật
     const submitBtn = document.querySelector('button[onclick="submitAdminPost()"]');
