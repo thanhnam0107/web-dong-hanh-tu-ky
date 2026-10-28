@@ -785,13 +785,13 @@ import { getFirestore, collection, getDocs, addDoc, onSnapshot } from "https://w
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAEt6SYdblkSP1IMWDREzr70-i7LW1MGxw",
-    authDomain: "congdongtukyvn.firebaseapp.com",
-    projectId: "congdongtukyvn",
-    storageBucket: "congdongtukyvn.appspot.com",
-    messagingSenderId: "887233767366",
-    appId: "1:887233767366:web:ca4b187e37bb53bd5f4c7",
-    measurementId: "G-21DSZYZ6X5"
+   apiKey: "AIzaSyAEt6SYdblkSP1IMWDREzr70-i7LW1MGXw",
+  authDomain: "congdongtukyvn.firebaseapp.com",
+  projectId: "congdongtukyvn",
+  storageBucket: "congdongtukyvn.firebasestorage.app",
+  messagingSenderId: "887233767366",
+  appId: "1:887233767366:web:ca4b187ae37bb53bd5f4c7",
+  measurementId: "G-21DZSYZ6X5"
 };
 
 const ADMIN_EMAILS = [
