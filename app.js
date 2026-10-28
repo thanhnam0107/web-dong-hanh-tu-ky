@@ -931,6 +931,16 @@ async function loadTinTuc() {
         const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
 
         tinTucData.forEach((item, index) => {
+            // Xử lý hiển thị media (Hình ảnh hoặc Video nhúng) cho mục Tin tức
+            let mediaHtml = '';
+            if (item.mediaUrl && item.mediaUrl !== '') {
+                if (item.mediaType === 'image') {
+                    mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${item.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
+                } else if (item.mediaType === 'video') {
+                    mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${item.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+                }
+            }
+
             const fullText = item.noiDung || '';
             const shortText = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
             const sourceBadge = item.nguonLink ? `<a href="${item.nguonLink}" target="_blank" rel="noopener noreferrer" class="text-xs text-teal-600 hover:underline inline-flex items-center gap-1 mt-2">🔗 Có đính kèm link nguồn gốc chuẩn bản quyền</a>` : '';
@@ -942,7 +952,8 @@ async function loadTinTuc() {
                     <div>
                         <span class="text-xs text-teal-700 font-semibold">📅 ${item.ngayDang || ''}</span>
                         <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2 cursor-pointer hover:text-teal-700" onclick="openTinTucModal(${index})">${item.tieuDe || item.tieude || ''}</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-line">${shortText}</p>
+                        ${mediaHtml}
+                        <p class="text-slate-600 text-sm mt-3 leading-relaxed whitespace-pre-line">${shortText}</p>
                         ${sourceBadge}
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center">
