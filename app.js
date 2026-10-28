@@ -703,7 +703,14 @@ function renderCards() {
         return;
     }
 
-    filtered.forEach((guide) => {
+    filtered.forEach((guide) => {let mediaHtml = '';
+    if (guide.mediaUrl && guide.mediaUrl !== '') {
+        if (guide.mediaType === 'image') {
+            mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
+        } else if (guide.mediaType === 'video') {
+            mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${guide.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+        }
+    }
         const realIndex = guidesData.indexOf(guide);
         const rawText = guide.summary || guide.content || '';
         const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
@@ -716,6 +723,7 @@ function renderCards() {
                         <span class="text-[11px] text-slate-400 font-medium">${categoryNames[guide.category] || ''}</span>
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 mt-3 leading-snug hover:text-teal-700 cursor-pointer" onclick="openArticleModal(${realIndex})">${guide.title}</h3>
+                    ${mediaHtml}
                     <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${shortExcerpt}</p>
                 </div>
                 <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
@@ -1060,6 +1068,8 @@ window.submitAdminPost = async function() {
     const title = document.getElementById('admin-title').value.trim();
     const content = document.getElementById('admin-content').value.trim();
     const today = new Date().toLocaleDateString("vi-VN");
+    const mediaUrl = document.getElementById('mediaUrl').value.trim();
+    const mediaType = document.getElementById('mediaType').value;
 
     if (!title || !content) {
         alert("Vui lòng nhập đầy đủ Tiêu đề và Nội dung!");
@@ -1078,7 +1088,9 @@ window.submitAdminPost = async function() {
                 tieuDe: title,
                 noiDung: content,
                 nguonLink: nguonLink,
-                ngayDang: today
+                ngayDang: today,
+                mediaUrl: mediaType !== 'none' ? mediaUrl : '',
+    mediaType: mediaType,
             });
             alert("Đã xuất bản Tin tức thành công lên đám mây!");
             document.getElementById('admin-source-link').value = "";
@@ -1087,7 +1099,9 @@ window.submitAdminPost = async function() {
             await addDoc(collection(db, "tam_su"), {
                 tieuDe: title,
                 noiDung: content,
-                ngayDang: today
+                ngayDang: today,
+                mediaUrl: mediaType !== 'none' ? mediaUrl : '',
+    mediaType: mediaType,
             });
             alert("Đã xuất bản bài Tâm sự thành công lên đám mây!");
         } 
@@ -1097,7 +1111,9 @@ window.submitAdminPost = async function() {
             const summary = document.getElementById('admin-summary').value.trim() || content.substring(0, 120) + "...";
             
             await addDoc(collection(db, "bai_hoc"), {
-                title, category, tag, duration: "Thực hành hàng ngày", summary, content, ngayDang: today
+                title, category, tag, duration: "Thực hành hàng ngày", summary, content, ngayDang: today,
+                mediaUrl: mediaType !== 'none' ? mediaUrl : '',
+    mediaType: mediaType,
             });
             alert("Đã xuất bản bài học mới lên Firebase thành công cho toàn bộ hệ thống!");
             document.getElementById('admin-summary').value = "";
