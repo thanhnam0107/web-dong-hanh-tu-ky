@@ -654,12 +654,14 @@ Nhưng sự thật là: Hai điều đó hoàn toàn có thể xảy ra cùng m�
     }
 ];
 
-// Kết hợp dữ liệu gốc và dữ liệu thêm mới từ bảng Admin
+// =========================================================================
+// PHẦN XỬ LÝ HIỂN THỊ 35 BÀI HỌC, ĐĂNG NHẬP GOOGLE, ADMIN & FIREBASE
+// =========================================================================
+
 let savedPosts = JSON.parse(localStorage.getItem('lana_custom_posts')) || [];
 let guidesData = [...savedPosts, ...defaultGuidesData];
 let currentCategoryFilter = 'all';
 
-// Tên hiển thị của các chuyên mục
 const categoryNames = {
     'nen-tang': '🧠 Hiểu đúng về Tự kỷ & Khoa học',
     'giao-tiep': '💬 Giao tiếp & Ngôn ngữ',
@@ -668,19 +670,19 @@ const categoryNames = {
     'tam-su': '💛 Nhật ký Mẹ Súp & Tâm lý Cha mẹ'
 };
 
-// 2. HÀM HIỂN THỊ & LỌC DANH SÁCH BÀI HỌC
-function filterGuides(selectedCategory, btnElement = null) {
+// 1. GẮN TOÀN BỘ HÀM GIAO DIỆN VÀO WINDOW ĐỂ HTML GỌI ĐƯỢC TRONG MODULE
+window.filterGuides = function(selectedCategory, btnElement = null) {
     currentCategoryFilter = selectedCategory;
     if (btnElement) {
         document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
     }
     renderCards();
-}
+};
 
-function searchGuides() {
+window.searchGuides = function() {
     renderCards();
-}
+};
 
 function renderCards() {
     const container = document.getElementById('guide-container');
@@ -692,7 +694,7 @@ function renderCards() {
         const matchCat = currentCategoryFilter === 'all' || item.category === currentCategoryFilter;
         const matchSearch = !keyword || 
             item.title.toLowerCase().includes(keyword) || 
-            item.summary.toLowerCase().includes(keyword) || 
+            (item.summary && item.summary.toLowerCase().includes(keyword)) || 
             item.content.toLowerCase().includes(keyword);
         return matchCat && matchSearch;
     });
@@ -704,20 +706,24 @@ function renderCards() {
 
     filtered.forEach((guide) => {
         const realIndex = guidesData.indexOf(guide);
+        // Rút gọn nội dung (substring 150 ký tự) kèm nút Đọc tiếp
+        const rawText = guide.summary || guide.content || '';
+        const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
+
         const card = `
            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
                 <div>
                     <div class="flex justify-between items-center gap-2">
-                        <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">${guide.tag}</span>
+                        <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">${guide.tag || 'Bài học'}</span>
                         <span class="text-[11px] text-slate-400 font-medium">${categoryNames[guide.category] || ''}</span>
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 mt-3 leading-snug hover:text-teal-700 cursor-pointer" onclick="openArticleModal(${realIndex})">${guide.title}</h3>
-                    <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${guide.summary}</p>
+                    <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${shortExcerpt}</p>
                 </div>
                 <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-                    <span>⏱ ${guide.duration}</span>
+                    <span>⏱ ${guide.duration || 'Đọc hiểu: 4 phút'}</span>
                     <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">
-                        Đọc chi tiết →
+                        Đọc tiếp →
                     </button>
                 </div>
             </div>
@@ -726,14 +732,14 @@ function renderCards() {
     });
 }
 
-// 3. HÀM MỞ ĐỌC CHI TIẾT BÀI VIẾT (GẮN GLOBAL ĐỂ HTML GỌI ĐƯỢC)
+// 2. MỞ / ĐÓNG CỬA SỔ ĐỌC CHI TIẾT BÀI HỌC
 window.openArticleModal = function(realIndex) {
     const article = guidesData[realIndex];
     if (!article) return;
-    document.getElementById('modal-tag').innerText = `${article.tag} • ${categoryNames[article.category] || ''}`;
+    document.getElementById('modal-tag').innerText = `${article.tag || 'Bài học'} • ${categoryNames[article.category] || ''}`;
     document.getElementById('modal-title').innerText = article.title;
     document.getElementById('modal-content').innerText = article.content || article.summary;
-    document.getElementById('modal-duration').innerText = "⏱ " + article.duration;
+    document.getElementById('modal-duration').innerText = "⏱ " + (article.duration || "Thực hành hàng ngày");
     document.getElementById('article-modal').classList.remove('hidden');
 };
 
@@ -741,12 +747,7 @@ window.closeArticleModal = function() {
     document.getElementById('article-modal').classList.add('hidden');
 };
 
-// 4. HÀM QUẢN TRỊ ADMIN: THÊM BÀI HỌC MỚI
-window.toggleAdminModal = function() {
-    document.getElementById('admin-modal').classList.toggle('hidden');
-};
-
-// 5. HÀM CHẤM ĐIỂM BẢNG SÀNG LỌC
+// 3. BẢNG SÀNG LỌC NHANH
 window.evaluateChecklist = function() {
     const checks = document.querySelectorAll('.check-item:checked');
     const count = checks.length;
@@ -764,253 +765,299 @@ window.evaluateChecklist = function() {
     }
 };
 
-// --- PHẦN KẾT NỐI FIREBASE & BÌNH LUẬN ---
-import { collection, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { auth, db } from "./firebase-config.js"; // Đảm bảo bạn đang import đúng cấu hình khởi tạo db và auth của bạn
+// 4. HIỂN THỊ NGAY 35 BÀI HỌC TRƯỚC KHI KẾT NỐI FIREBASE
+renderCards();
 
-async function loadTinTuc() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "tin_tuc"));
-    const container = document.getElementById("tin-tuc-container");
-    if (!container) return;
-    container.innerHTML = "";
+// =========================================================================
+// 5. KẾT NỐI FIREBASE, ĐĂNG NHẬP GOOGLE & PHÂN QUYỀN ADMIN
+// =========================================================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    if (querySnapshot.empty) {
-      container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài viết tin tức nào trên hệ thống.</p>`;
-      return;
-    }
-
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      container.innerHTML += `
-        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs text-teal-700 font-semibold">${data.ngayDang || ''}</span>
-          <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2">${data.tieuDe || ''}</h3>
-          <p class="text-slate-600 text-sm leading-relaxed">${data.noiDung || ''}</p>
-        </div>
-      `;
-    });
-  } catch (error) {
-    console.error("Lỗi tải tin tức: ", error);
-  }
-}
-
-async function loadTamSu() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "tam_su"));
-    const container = document.getElementById("tam-su-container");
-    if (!container) return;
-    container.innerHTML = "";
-
-    if (querySnapshot.empty) {
-      container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài tâm sự nào.</p>`;
-      return;
-    }
-
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const postId = docSnap.id;
-
-      const postElement = document.createElement("div");
-      postElement.className = "tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-4";
-      postElement.innerHTML = `
-        <h3 class="font-bold text-slate-900 text-lg mb-2">${data.tieuDe || ''}</h3>
-        <p class="text-slate-700 mb-3">${data.noiDung || ''}</p>
-        <small class="text-slate-400">Ngày đăng: ${data.ngayDang || ''}</small>
-        
-        <div class="comments-section mt-4 pt-3 border-t border-slate-100">
-          <h4 class="font-semibold text-sm text-slate-800 mb-2">Bình luận từ phụ huynh</h4>
-          <div id="comments-list-${postId}" class="comments-list space-y-2"></div>
-          
-          <div id="comment-form-wrapper-${postId}" style="display: none;" class="mt-3">
-            <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2 text-sm mb-2"></textarea>
-            <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700">Gửi bình luận</button>
-          </div>
-          <p id="login-prompt-${postId}" class="text-gray-400 text-xs italic mt-2">Vui lòng đăng nhập Google để viết bình luận.</p>
-        </div>
-      `;
-      container.appendChild(postElement);
-      taiBinhLuanRealtime(postId);
-    });
-  } catch (error) {
-    console.error("Lỗi tải tâm sự: ", error);
-  }
-}
-
-function taiBinhLuanRealtime(postId) {
-  const commentsRef = collection(db, "tam_su", postId, "comments");
-  onSnapshot(commentsRef, (snapshot) => {
-    const listDiv = document.getElementById(`comments-list-${postId}`);
-    if (!listDiv) return;
-    listDiv.innerHTML = "";
-    snapshot.forEach((doc) => {
-      const c = doc.data();
-      listDiv.innerHTML += `
-        <div class="comment-item flex items-center text-sm">
-          <img src="${c.anhDaiDien || 'https://via.placeholder.com/30'}" width="28" height="28" class="rounded-full mr-2">
-          <div><strong>${c.tenNguoiDung}</strong>: <span class="text-slate-600">${c.noiDungBinhLuan}</span></div>
-        </div>
-      `;
-    });
-  });
-}
-
-window.guiBinhLuan = async function(postId) {
-  const input = document.getElementById(`comment-input-${postId}`);
-  const noiDung = input.value.trim();
-  if (!noiDung) return;
-
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Bạn cần đăng nhập để bình luận!");
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "tam_su", postId, "comments"), {
-      tenNguoiDung: user.displayName || "Ẩn danh",
-      anhDaiDien: user.photoURL || "",
-      noiDungBinhLuan: noiDung,
-      thoiGian: new Date().toLocaleDateString("vi-VN")
-    });
-    input.value = "";
-  } catch (error) {
-    console.error("Lỗi gửi bình luận: ", error);
-  }
+// THAY THÔNG SỐ CẤU HÌNH FIREBASE CỦA DỰ ÁNcongdongtukyvn VÀO ĐÂY:
+const firebaseConfig = {
+    apiKey: "AIzaSyAEt6SYdblkSP1IMWDREzr70-i7LW1MGxw",
+    authDomain: "congdongtukyvn.firebaseapp.com",
+    projectId: "congdongtukyvn",
+    storageBucket: "congdongtukyvn.appspot.com",
+    messagingSenderId: "887233767366",
+    appId: "1:887233767366:web:ca4b187e37bb53bd5f4c7",
+    measurementId: "G-21DSZYZ6X5"
 };
 
-// MỘT ĐẦU MỐI DUY NHẤT KHỞI CHẠY KHI TẢI TRANG
-window.onload = () => {
-    renderCards();
+// DANH SÁCH EMAIL ADMIN ĐƯỢC QUYỀN ĐĂNG BÀI TRỰC TIẾP (Thay email của bạn vào đây):
+const ADMIN_EMAILS = [
+    "thanhnam0107@gmail.com",
+    "phunglananh@gmail.com"
+];
+
+let db = null;
+let auth = null;
+let currentUser = null;
+
+try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // Hàm Đăng nhập Google
+    window.dangNhapGoogle = async function() {
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (err) {
+            alert("Không thể đăng nhập Google. Vui lòng kiểm tra cấu hình Firebase Auth: " + err.message);
+        }
+    };
+
+    // Hàm Đăng xuất
+    window.dangXuatGoogle = async function() {
+        await signOut(auth);
+    };
+
+    // Lắng nghe trạng thái đăng nhập để ẩn/hiện khung bình luận và nút Admin
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        const loginBtn = document.getElementById('login-btn');
+        const tamSuLoginBtn = document.getElementById('tam-su-login-btn');
+        const userInfo = document.getElementById('user-info');
+        const adminBtn = document.getElementById('admin-btn');
+
+        if (user) {
+            loginBtn?.classList.add('hidden');
+            tamSuLoginBtn?.classList.add('hidden');
+            userInfo?.classList.remove('hidden');
+            userInfo?.classList.add('flex');
+            document.getElementById('user-avatar').src = user.photoURL || 'https://via.placeholder.com/30';
+            document.getElementById('user-name').innerText = user.displayName || user.email;
+
+            // Kiểm tra quyền Admin: nếu email nằm trong ADMIN_EMAILS thì hiện nút Quản trị
+            if (ADMIN_EMAILS.includes(user.email)) {
+                adminBtn?.classList.remove('hidden');
+            } else {
+                adminBtn?.classList.add('hidden');
+            }
+        } else {
+            loginBtn?.classList.remove('hidden');
+            tamSuLoginBtn?.classList.remove('hidden');
+            userInfo?.classList.add('hidden');
+            userInfo?.classList.remove('flex');
+            adminBtn?.classList.add('hidden');
+        }
+
+        // Cập nhật ẩn/hiện khung nhập bình luận cho tất cả bài Tâm sự
+        capNhatKhungBinhLuan();
+    });
+
     loadTinTuc();
     loadTamSu();
-};
-// --- PHẦN KẾT NỐI FIREBASE & BÌNH LUẬN AN TOÀN ---
-import { collection, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { auth, db } from "./firebase-config.js";
-
-async function loadTinTuc() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "tin_tuc"));
-    const container = document.getElementById("tin-tuc-container");
-    if (!container) return;
-    container.innerHTML = "";
-
-    if (querySnapshot.empty) {
-      container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài viết tin tức nào trên hệ thống.</p>`;
-      return;
-    }
-
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      container.innerHTML += `
-        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm">
-          <span class="text-xs text-teal-700 font-semibold">${data.ngayDang || ''}</span>
-          <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2">${data.tieuDe || ''}</h3>
-          <p class="text-slate-600 text-sm leading-relaxed">${data.noiDung || ''}</p>
-        </div>
-      `;
-    });
-  } catch (error) {
-    console.error("Lỗi tải tin tức (có thể bỏ qua nếu chưa tạo collection): ", error);
-    const container = document.getElementById("tin-tuc-container");
-    if (container) container.innerHTML = `<p class="text-slate-500 italic">Đang cập nhật tin tức...</p>`;
-  }
+} catch (e) {
+    console.warn("Firebase chưa cấu hình đầy đủ, hệ thống vẫn chạy 35 bài học bình thường:", e);
 }
 
-async function loadTamSu() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "tam_su"));
-    const container = document.getElementById("tam-su-container");
-    if (!container) return;
-    container.innerHTML = "";
-
-    if (querySnapshot.empty) {
-      container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài tâm sự nào.</p>`;
-      return;
-    }
-
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const postId = docSnap.id;
-
-      const postElement = document.createElement("div");
-      postElement.className = "tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-4";
-      postElement.innerHTML = `
-        <h3 class="font-bold text-slate-900 text-lg mb-2">${data.tieuDe || ''}</h3>
-        <p class="text-slate-700 mb-3">${data.noiDung || ''}</p>
-        <small class="text-slate-400">Ngày đăng: ${data.ngayDang || ''}</small>
-        
-        <div class="comments-section mt-4 pt-3 border-t border-slate-100">
-          <h4 class="font-semibold text-sm text-slate-800 mb-2">Bình luận từ phụ huynh</h4>
-          <div id="comments-list-${postId}" class="comments-list space-y-2"></div>
-          
-          <div id="comment-form-wrapper-${postId}" style="display: none;" class="mt-3">
-            <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2 text-sm mb-2"></textarea>
-            <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700">Gửi bình luận</button>
-          </div>
-          <p id="login-prompt-${postId}" class="text-gray-400 text-xs italic mt-2">Vui lòng đăng nhập Google để viết bình luận.</p>
-        </div>
-      `;
-      container.appendChild(postElement);
-      taiBinhLuanRealtime(postId);
+function capNhatKhungBinhLuan() {
+    document.querySelectorAll('.comment-form-box').forEach(box => {
+        box.style.display = currentUser ? 'block' : 'none';
     });
-  } catch (error) {
-    console.error("Lỗi tải tâm sự: ", error);
-    const container = document.getElementById("tam-su-container");
-    if (container) container.innerHTML = `<p class="text-slate-500 italic">Đang cập nhật góc tâm sự...</p>`;
-  }
+    document.querySelectorAll('.login-prompt-msg').forEach(msg => {
+        msg.style.display = currentUser ? 'none' : 'block';
+    });
+}
+
+// 6. TẢI TIN TỨC TỪ FIREBASE
+async function loadTinTuc() {
+    if (!db) return;
+    try {
+        const querySnapshot = await getDocs(collection(db, "tin_tuc"));
+        const container = document.getElementById("tin-tuc-container");
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (querySnapshot.empty) {
+            container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài viết tin tức nào trên hệ thống.</p>`;
+            return;
+        }
+
+        querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const fullText = data.noiDung || '';
+            const shortText = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
+
+            container.innerHTML += `
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-teal-700 font-semibold">📅 ${data.ngayDang || ''}</span>
+                        <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2">${data.tieuDe || data.tieude || ''}</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-line">${shortText}</p>
+                    </div>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Lỗi tải tin tức: ", error);
+    }
+}
+
+// 7. TẢI TÂM SỰ & BÌNH LUẬN THỜI GIAN THỰC (CHẶN SPAM BẰNG GOOGLE AUTH)
+async function loadTamSu() {
+    if (!db) return;
+    try {
+        const querySnapshot = await getDocs(collection(db, "tam_su"));
+        const container = document.getElementById("tam-su-container");
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (querySnapshot.empty) {
+            container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài tâm sự nào.</p>`;
+            return;
+        }
+
+        querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const postId = docSnap.id;
+            const tieuDe = data.tieuDe || data.tieude || 'Chia sẻ từ phụ huynh';
+
+            const postElement = document.createElement("div");
+            postElement.className = "tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm";
+            postElement.innerHTML = `
+                <h3 class="font-bold text-slate-900 text-lg mb-2">${tieuDe}</h3>
+                <p class="text-slate-700 mb-3 whitespace-pre-line leading-relaxed">${data.noiDung || ''}</p>
+                <small class="text-slate-400">Ngày đăng: ${data.ngayDang || ''}</small>
+                
+                <div class="comments-section mt-4 pt-3 border-t border-slate-100">
+                    <h4 class="font-semibold text-sm text-slate-800 mb-2">💬 Bình luận từ phụ huynh</h4>
+                    <div id="comments-list-${postId}" class="comments-list space-y-2 mb-3"></div>
+                    
+                    <!-- Khung nhập bình luận: Mặc định ẩn, chỉ hiện khi đã đăng nhập Google -->
+                    <div id="comment-form-wrapper-${postId}" class="comment-form-box mt-3" style="display: ${currentUser ? 'block' : 'none'};">
+                        <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm mb-2 focus:outline-none focus:border-teal-600"></textarea>
+                        <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">
+                            Gửi bình luận
+                        </button>
+                    </div>
+                    <!-- Thông báo yêu cầu đăng nhập -->
+                    <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
+                        🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (nhằm định danh và chặn spam).
+                    </p>
+                </div>
+            `;
+            container.appendChild(postElement);
+            taiBinhLuanRealtime(postId);
+        });
+    } catch (error) {
+        console.error("Lỗi tải tâm sự: ", error);
+    }
 }
 
 function taiBinhLuanRealtime(postId) {
-  try {
-    const commentsRef = collection(db, "tam_su", postId, "comments");
-    onSnapshot(commentsRef, (snapshot) => {
-      const listDiv = document.getElementById(`comments-list-${postId}`);
-      if (!listDiv) return;
-      listDiv.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const c = doc.data();
-        listDiv.innerHTML += `
-          <div class="comment-item flex items-center text-sm">
-            <img src="${c.anhDaiDien || 'https://via.placeholder.com/30'}" width="28" height="28" class="rounded-full mr-2">
-            <div><strong>${c.tenNguoiDung}</strong>: <span class="text-slate-600">${c.noiDungBinhLuan}</span></div>
-          </div>
-        `;
-      });
-    });
-  } catch (e) {
-    console.error("Lỗi realtime bình luận: ", e);
-  }
+    if (!db) return;
+    try {
+        const commentsRef = collection(db, "tam_su", postId, "comments");
+        onSnapshot(commentsRef, (snapshot) => {
+            const listDiv = document.getElementById(`comments-list-${postId}`);
+            if (!listDiv) return;
+            listDiv.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const c = doc.data();
+                listDiv.innerHTML += `
+                    <div class="comment-item flex items-start bg-slate-50 p-2.5 rounded-lg text-sm">
+                        <img src="${c.anhDaiDien || 'https://via.placeholder.com/30'}" width="28" height="28" class="rounded-full mr-2.5 mt-0.5">
+                        <div>
+                            <strong class="text-slate-900">${c.tenNguoiDung}</strong>
+                            <span class="text-xs text-slate-400 ml-2">${c.thoiGian || ''}</span>
+                            <p class="text-slate-700 mt-0.5">${c.noiDungBinhLuan}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    } catch (e) {
+        console.error("Lỗi realtime bình luận: ", e);
+    }
 }
 
 window.guiBinhLuan = async function(postId) {
-  const input = document.getElementById(`comment-input-${postId}`);
-  const noiDung = input.value.trim();
-  if (!noiDunn) return;
+    const input = document.getElementById(`comment-input-${postId}`);
+    if (!input) return;
+    const noiDung = input.value.trim(); // Đã sửa lỗi chính tả noiDunn -> noiDung
+    if (!noiDung) return;
 
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Bạn cần đăng nhập để bình luận!");
-    return;
-  }
+    if (!currentUser) {
+        alert("Vui lòng đăng nhập bằng Google trước khi gửi bình luận!");
+        return;
+    }
 
-  try {
-    await addDoc(collection(db, "tam_su", postId, "comments"), {
-      tenNguoiDung: user.displayName || "Ẩn danh",
-      anhDaiDien: user.photoURL || "",
-      noiDungBinhLuan: noiDung,
-      thoiGian: new Date().toLocaleDateString("vi-VN")
-    });
-    input.value = "";
-  } catch (error) {
-    console.error("Lỗi gửi bình luận: ", error);
-  }
+    try {
+        await addDoc(collection(db, "tam_su", postId, "comments"), {
+            tenNguoiDung: currentUser.displayName || "Phụ huynh",
+            anhDaiDien: currentUser.photoURL || "",
+            noiDungBinhLuan: noiDung,
+            thoiGian: new Date().toLocaleDateString("vi-VN")
+        });
+        input.value = "";
+    } catch (error) {
+        alert("Lỗi khi gửi bình luận: " + error.message);
+    }
 };
 
-// LUÔN ĐẢM BẢO RENDER BÀI HỌC TRƯỚC, SAU ĐÓ MỚI GỌI FIREBASE
-window.onload = () => {
-    renderCards(); // Hiển thị 35 bài học ngay lập tức
-    loadTinTuc();  // Tải tin tức không làm ảnh hưởng bài học nếu lỗi
-    loadTamSu();   // Tải tâm sự không làm ảnh hưởng bài học nếu lỗi
+// 8. QUẢN TRỊ ADMIN: ĐĂNG TIN TỨC / TÂM SỰ TRỰC TIẾP LÊN FIREBASE
+window.toggleAdminModal = function() {
+    document.getElementById('admin-modal').classList.toggle('hidden');
+};
+
+window.toggleAdminFields = function() {
+    const postType = document.getElementById('admin-post-type').value;
+    const extraFields = document.getElementById('admin-guide-extra');
+    if (postType === 'bai_hoc') {
+        extraFields.classList.remove('hidden');
+    } else {
+        extraFields.classList.add('hidden');
+    }
+};
+
+window.submitAdminPost = async function() {
+    const postType = document.getElementById('admin-post-type').value;
+    const title = document.getElementById('admin-title').value.trim();
+    const content = document.getElementById('admin-content').value.trim();
+    const today = new Date().toLocaleDateString("vi-VN");
+
+    if (!title || !content) {
+        alert("Vui lòng nhập đầy đủ Tiêu đề và Nội dung!");
+        return;
+    }
+
+    if (postType === 'tin_tuc' || postType === 'tam_su') {
+        if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) {
+            alert("Chỉ tài khoản Admin mới có quyền đăng trực tiếp lên hệ thống!");
+            return;
+        }
+        try {
+            await addDoc(collection(db, postType), {
+                tieuDe: title,
+                noiDung: content,
+                ngayDang: today
+            });
+            alert("Đã xuất bản bài viết thành công lên đám mây!");
+            document.getElementById('admin-title').value = "";
+            document.getElementById('admin-content').value = "";
+            toggleAdminModal();
+            if (postType === 'tin_tuc') loadTinTuc();
+            if (postType === 'tam_su') loadTamSu();
+        } catch (err) {
+            alert("Lỗi khi đăng lên Firebase: " + err.message);
+        }
+    } else {
+        // Lưu bài học mới
+        const category = document.getElementById('admin-category').value;
+        const tag = document.getElementById('admin-tag').value.trim() || "Thực hành tại nhà";
+        const summary = document.getElementById('admin-summary').value.trim() || content.substring(0, 120) + "...";
+        const newGuide = { title, category, tag, duration: "Thực hành hàng ngày", summary, content };
+        savedPosts.unshift(newGuide);
+        localStorage.setItem('lana_custom_posts', JSON.stringify(savedPosts));
+        guidesData = [...savedPosts, ...defaultGuidesData];
+        renderCards();
+        toggleAdminModal();
+        alert("Đã thêm bài học mới vào Thư viện!");
+    }
 };
