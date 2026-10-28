@@ -704,17 +704,19 @@ function renderCards() {
     filtered.forEach((guide) => {
         const realIndex = guidesData.indexOf(guide);
         const card = `
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
+           <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
                 <div>
                     <div class="flex justify-between items-center gap-2">
                         <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">${guide.tag}</span>
                         <span class="text-[11px] text-slate-400 font-medium">${categoryNames[guide.category] || ''}</span>
                     </div>
+                    <!-- Đảm bảo gọi đúng hàm openArticleModal -->
                     <h3 class="text-lg font-bold text-slate-900 mt-3 leading-snug hover:text-teal-700 cursor-pointer" onclick="openArticleModal(${realIndex})">${guide.title}</h3>
                     <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${guide.summary}</p>
                 </div>
                 <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
                     <span>⏱ ${guide.duration}</span>
+                    <!-- Đảm bảo nút bấm gọi đúng hàm openArticleModal -->
                     <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">
                         Đọc chi tiết →
                     </button>
