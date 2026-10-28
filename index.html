@@ -265,6 +265,25 @@
         <p>© 2026 Đồng Hành Cùng Con - Sáng lập bởi Lana (MSc Psychology Candidate, CityU Hong Kong).</p>
     </footer>
 
-    <script src="app.js"></script>
+    <script // Ví dụ đoạn mã xử lý hiển thị bài viết trên trang chủ của bạn
+function hienThiTrangChu(danhSachBaiViet) {
+  const container = document.getElementById("home-posts-container");
+  container.innerHTML = "";
+
+  danhSachBaiViet.forEach(post => {
+    // Dùng hàm cắt chuỗi để rút gọn nội dung hiển thị trang 1
+    const shortContent = post.content.length > 150 
+      ? post.content.substring(0, 150) + "..." 
+      : post.content;
+
+    container.innerHTML += `
+      <div class="post-item">
+        <h2>${post.title}</h2>
+        <p>${shortContent}</p>
+        <button onclick="xemChiTiet('${post.id}')">Đọc tiếp</button>
+      </div>
+    `;
+  });
+}</script>
 </body>
 </html>
