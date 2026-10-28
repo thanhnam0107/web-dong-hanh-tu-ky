@@ -28,7 +28,9 @@
             <a href="#" class="text-xl font-bold text-teal-700">🌱 Đồng Hành Cùng Con</a>
             <nav class="hidden md:flex space-x-6 font-medium text-slate-600">
                 <a href="#gioi-thieu" class="hover:text-teal-600 transition">Về Lana & Bé Súp</a>
-                <a href="#lo-trinh" class="hover:text-teal-600 transition">Thư viện 35 Bài học</a>
+                <a href="#lo-trinh" class="hover:text-teal-600 transition">Thư viện Bài học</a>
+                <a href="#tin-tuc" class="hover:text-teal-600 transition">Tin tức</a>
+                <a href="#tam-su" class="hover:text-teal-600 transition">Tâm sự</a>
                 <a href="#sang-loc" class="hover:text-teal-600 transition">Sàng lọc nhanh</a>
             </nav>
             <div class="flex items-center space-x-3">
@@ -57,7 +59,7 @@
                 </p>
                 <div class="mt-8 flex flex-wrap gap-4">
                     <a href="#lo-trinh" class="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition shadow-lg">
-                        Khám phá 35 bài học thực chiến
+                        Khám phá bài học thực chiến
                     </a>
                     <a href="#gioi-thieu" class="bg-white/10 border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition">
                         Câu chuyện của Lana
@@ -70,13 +72,13 @@
         </div>
     </section>
 
-    <!-- 3. PHẦN GIỚI THIỆU: CÂU CHUYỆN CỦA LANA -->
+    <!-- 3. PHẦN GIỚI THIỆU: CÂU CHUYỆN CỦA LANA & PHÙNG LAN ANH -->
     <section id="gioi-thieu" class="py-16 px-4 bg-white border-b border-slate-200">
         <div class="max-w-5xl mx-auto">
             <div class="bg-gradient-to-br from-teal-50/70 to-slate-50 p-8 md:p-12 rounded-2xl border border-teal-100 shadow-sm">
                 <span class="text-teal-700 font-bold text-sm uppercase tracking-wider">Lời nhắn gửi từ người sáng lập</span>
                 <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-2">
-                    "Xin chào, mình là Lana — mẹ của em bé Súp thuộc phổ tự kỷ (ASD)"
+                    "Xin chào, mình là Phùng Lan Anh (Lana) — mẹ của em bé Súp thuộc phổ tự kỷ (ASD)"
                 </h2>
                 <p class="mt-4 text-slate-700 leading-relaxed">
                     Sau khi con nhận chẩn đoán lúc 2 tuổi, giống như bao cha mẹ có con tự kỷ ngoài kia, cuộc sống của mình bỗng chốc thay đổi tất cả. Việc đồng hành cùng con trở nên quan trọng hơn hết thảy mọi thứ trên đời! Mình lựa chọn <strong>tự can thiệp cho con 100% tại nhà</strong>, và để làm điều đó một cách tốt nhất, mình đã:
@@ -104,59 +106,64 @@
                         </p>
                     </div>
                 </div>
-                <div class="bg-teal-700 text-white p-6 rounded-xl">
-                    <p class="font-medium leading-relaxed">
-                        "Và mình nghĩ việc bạn đang ở đây, đọc những dòng chữ này, có nghĩa là chúng ta đều có những đứa trẻ đặc biệt trong đời. Hy vọng tại ngôi nhà nhỏ này, bạn sẽ:"
-                    </p>
-                    <ul class="mt-3 space-y-2 text-teal-100 text-sm md:text-base">
-                        <li>✨ <strong>Có được những thông tin thực hành hữu ích</strong> trong việc đồng hành và dạy con tại nhà.</li>
-                        <li>✨ <strong>Có thêm động lực và sự vững tâm</strong> để tiếp tục cố gắng cùng con mỗi ngày.</li>
-                    </ul>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- 4. THƯ VIỆN BÀI HỌC & CHIA SẺ PHÂN THEO 5 CHUYÊN MỤC KHOA HỌC -->
+    <!-- 4. THƯ VIỆN BÀI HỌC -->
     <section id="lo-trinh" class="max-w-6xl mx-auto px-4 py-14">
         <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-6 gap-4">
             <div>
                 <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Thư viện Kiến thức & Bài học Thực chiến</h2>
                 <p class="text-slate-600 mt-1">Được phân loại khoa học theo từng mảng phát triển của trẻ và tâm lý cha mẹ:</p>
             </div>
-            <!-- Thanh tìm kiếm nhanh bài viết -->
             <div class="w-full md:w-72">
                 <input id="search-input" oninput="searchGuides()" type="text" placeholder="🔍 Tìm bài học (VD: nhại lời, ăn vạ...)" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-teal-600 shadow-sm">
             </div>
         </div>
 
-        <!-- 5 Chuyên mục khoa học -->
         <div class="flex flex-wrap gap-2.5 mb-8">
             <button onclick="filterGuides('all', this)" class="cat-btn active bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                Tất cả bài viết (35)
+                Tất cả bài viết
             </button>
             <button onclick="filterGuides('nen-tang', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                🧠 Hiểu đúng về Tự kỷ & Khoa học (6)
+                🧠 Hiểu đúng về Tự kỷ & Khoa học
             </button>
             <button onclick="filterGuides('giao-tiep', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                💬 Giao tiếp & Ngôn ngữ (7)
+                💬 Giao tiếp & Ngôn ngữ
             </button>
             <button onclick="filterGuides('hanh-vi', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                🧩 Hành vi & Kỷ luật tích cực ABA (7)
+                🧩 Hành vi & Kỷ luật tích cực ABA
             </button>
             <button onclick="filterGuides('tu-lap', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                🎈 Chơi, Giác quan & Học tập (6)
+                🎈 Chơi, Giác quan & Học tập
             </button>
             <button onclick="filterGuides('tam-su', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                💛 Nhật ký Mẹ Súp & Tâm lý Cha mẹ (9)
+                💛 Nhật ký Mẹ Súp & Tâm lý Cha mẹ
             </button>
         </div>
 
-        <!-- Khu vực hiển thị danh sách bài hướng dẫn -->
         <div id="guide-container" class="grid md:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 5. CÔNG CỤ KIỂM TRA NHANH DẤU HIỆU SỚM -->
+    <!-- 5. MỤC TIN TỨC (DỮ LIỆU TỪ FIREBASE) -->
+    <section id="tin-tuc" class="max-w-6xl mx-auto px-4 py-14 bg-white border-y border-slate-200">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-6">📰 Tin tức & Cập nhật mới nhất</h2>
+        <div id="tin-tuc-container" class="grid md:grid-cols-2 gap-6">
+            <p class="text-slate-500 italic">Đang tải tin tức từ hệ thống đám mây...</p>
+        </div>
+    </section>
+
+    <!-- 6. MỤC TÂM SỰ & BÌNH LUẬN (DỮ LIỆU TỪ FIREBASE) -->
+    <section id="tam-su" class="max-w-6xl mx-auto px-4 py-14">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">💛 Góc Tâm Sự & Chia Sẻ Từ Phụ Huynh</h2>
+        <p class="text-slate-600 mb-6">Nơi các bậc cha mẹ cùng nhau giãi bày và kết nối (Yêu cầu đăng nhập Google để bình luận).</p>
+        <div id="tam-su-container" class="space-y-6">
+            <p class="text-slate-500 italic">Đang tải bài viết tâm sự...</p>
+        </div>
+    </section>
+
+    <!-- 7. CÔNG CỤ KIỂM TRA NHANH DẤU HIỆU SỚM -->
     <section id="sang-loc" class="bg-white border-y border-slate-200 py-14 px-4">
         <div class="max-w-3xl mx-auto">
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Bảng kiểm tra nhanh dấu hiệu giao tiếp sớm</h2>
@@ -186,7 +193,7 @@
         </div>
     </section>
 
-    <!-- 6. CỬA SỐ ĐỌC CHI TIẾT BÀI VIẾT (MODAL) -->
+    <!-- 8. MODAL ĐỌC CHI TIẾT BÀI VIẾT -->
     <div id="article-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[88vh] overflow-y-auto p-6 md:p-10 shadow-2xl">
             <div class="flex justify-between items-start border-b border-slate-100 pb-4 sticky top-0 bg-white pt-1">
@@ -204,7 +211,7 @@
         </div>
     </div>
 
-    <!-- 7. BẢNG QUẢN TRỊ ADMIN ĐỂ THÊM BÀI HỌC MỚI -->
+    <!-- 9. BẢNG QUẢN TRỊ ADMIN -->
     <div id="admin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -237,60 +244,26 @@
                     <input id="admin-duration" type="text" placeholder="Ví dụ: Thực hành hàng ngày" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tóm tắt ngắn (Hiển thị ngoài thẻ bài viết) *</label>
-                    <textarea id="admin-summary" rows="2" placeholder="Tóm tắt 1-2 câu cốt lõi của bài viết..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tóm tắt ngắn *</label>
+                    <textarea id="admin-summary" rows="2" placeholder="Tóm tắt 1-2 câu cốt lõi..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nội dung chi tiết của bài viết *</label>
-                    <textarea id="admin-content" rows="6" placeholder="Dán toàn bộ nội dung bài viết vào đây..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nội dung chi tiết *</label>
+                    <textarea id="admin-content" rows="6" placeholder="Dán toàn bộ nội dung..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
                 </div>
                 <button onclick="addNewPost()" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">
-                    1. Đăng lên trang web & Tạo mã lưu vĩnh viễn
+                    Đăng lên trang web
                 </button>
-                <div id="code-export-box" class="hidden bg-slate-900 text-teal-300 p-4 rounded-xl text-xs font-mono">
-                    <p class="text-white font-sans font-semibold mb-2">
-                        ✅ Bài viết đã hiển thị! Để lưu vĩnh viễn lên Internet, hãy bấm nút Copy bên dưới và dán vào dưới dòng `const defaultGuidesData = [` trong file `app.js`:
-                    </p>
-                    <pre id="generated-code" class="overflow-x-auto whitespace-pre-wrap bg-slate-950 p-3 rounded border border-slate-700"></pre>
-                    <button onclick="copyGeneratedCode()" class="mt-3 bg-teal-500 text-slate-950 font-sans font-bold px-4 py-1.5 rounded hover:bg-teal-400">
-                        📋 Copy đoạn mã bài viết này
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- 8. CHÂN TRANG -->
+    <!-- 10. CHÂN TRANG -->
     <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm">
-        <p>© 2026 Đồng Hành Cùng Con - Sáng lập bởi Lana (MSc Psychology Candidate, CityU Hong Kong).</p>
+        <p>© 2026 Đồng Hành Cùng Con - Sáng lập bởi Phùng Lan Anh (Lana) (MSc Psychology Candidate, CityU Hong Kong).</p>
     </footer>
 
-    <!-- Thẻ chứa hiển thị bài viết trang chủ -->
-    <div id="home-posts-container"></div>
-
-    <script>
-    // Ví dụ đoạn mã xử lý hiển thị bài viết trên trang chủ của bạn
-    function hienThiTrangChu(danhSachBaiViet) {
-      const container = document.getElementById("home-posts-container");
-      if (!container) return;
-      container.innerHTML = "";
-
-      danhSachBaiViet.forEach(post => {
-        // Dùng hàm cắt chuỗi để rút gọn nội dung hiển thị trang 1
-        const shortContent = post.content.length > 150 
-          ? post.content.substring(0, 150) + "..." 
-          : post.content;
-
-        container.innerHTML += `
-          <div class="post-item bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-            <h2 class="font-bold text-slate-900 text-lg mb-2">${post.title}</h2>
-            <p class="text-slate-600 text-sm mb-4">${shortContent}</p>
-            <button onclick="xemChiTiet('${post.id}')" class="text-teal-600 font-semibold text-sm hover:underline">Đọc tiếp &rarr;</button>
-          </div>
-        `;
-      });
-    }
-    </script>
+    <!-- NHÚNG FILE app.js DƯỚI DẠNG MODULE ĐỂ CHẠY ĐƯỢC FIREBASE -->
+    <script type="module" src="app.js"></script>
 </body>
-</html>
 </html>

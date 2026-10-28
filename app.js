@@ -873,4 +873,38 @@ window.guiBinhLuan = async function(postId) {
   } catch (error) {
     console.error("Lỗi gửi bình luận: ", error);
   }
+};// Thêm đoạn này vào cuối file app.js để tải dữ liệu Tin tức và tự động khởi chạy khi trang mở:
+
+async function loadTinTuc() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "tin_tuc"));
+    const container = document.getElementById("tin-tuc-container");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (querySnapshot.empty) {
+      container.innerHTML = `<p class="text-slate-500 italic">Chưa có bài viết tin tức nào trên hệ thống.</p>`;
+      return;
+    }
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      container.innerHTML += `
+        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs text-teal-700 font-semibold">${data.ngayDang || ''}</span>
+          <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2">${data.tieuDe || ''}</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">${data.noiDung || ''}</p>
+        </div>
+      `;
+    });
+  } catch (error) {
+    console.error("Lỗi tải tin tức: ", error);
+  }
+}
+
+// Gắn sự kiện tự động chạy khi tải trang
+window.onload = () => {
+    renderCards();
+    loadTinTuc();
+    loadTamSu();
 };
