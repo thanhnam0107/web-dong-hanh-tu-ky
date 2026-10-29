@@ -813,6 +813,19 @@ window.openTinTucModal = function(index) {
     document.getElementById('modal-duration').innerText = "📅 Ngày đăng: " + (item.ngayDang || '');
     document.getElementById('article-modal').classList.remove('hidden');
 };
+window.openTamSuModal = function(postId) {
+    const item = tamSuDataMap[postId];
+    if (!item) return;
+    document.getElementById('modal-tag').innerText = "💛 Góc Tâm Sự & Chia Sẻ Từ Phụ Huynh";
+    document.getElementById('modal-title').innerText = item.tieuDe || item.tieude || 'Chia sẻ từ phụ huynh';
+    
+    const contentEl = document.getElementById('modal-content');
+    contentEl.innerHTML = renderModalMedia(item.mediaUrl, item.mediaType) + `<div class="whitespace-pre-line leading-relaxed text-base"></div>`;
+    contentEl.lastElementChild.innerText = item.noiDung || '';
+
+    document.getElementById('modal-duration').innerText = "📅 Ngày đăng: " + (item.ngayDang || '');
+    document.getElementById('article-modal').classList.remove('hidden');
+};
 
 window.closeArticleModal = function() {
     document.getElementById('article-modal').classList.add('hidden');
@@ -1058,29 +1071,42 @@ async function loadTamSu() {
             tamSuDataMap[postId] = data;
             const tieuDe = data.tieuDe || data.tieude || 'Chia sẻ từ phụ huynh';
 
+            // Thu nhỏ hình ảnh gọn gàng theo tỷ lệ 16:9 tương tự mục Bài học
             let mediaHtml = '';
             if (data.mediaUrl && data.mediaUrl !== '') {
                 if (data.mediaType === 'image') {
-                    mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${data.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-video object-cover"></div>`;
+                    mediaHtml = `<div class="mt-3 max-w-md rounded-xl overflow-hidden shadow-sm"><img src="${data.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-video object-cover"></div>`;
                 } else if (data.mediaType === 'video') {
-                    mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${data.mediaUrl}" frameborder="0" allowfullscreen></iframe></div>`;
+                    mediaHtml = `<div class="mt-3 max-w-md relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${data.mediaUrl}" frameborder="0" allowfullscreen></iframe></div>`;
                 }
             }
+
+            // Cắt ngắn văn bản hiển thị ngoài thẻ
+            const fullText = data.noiDung || '';
+            const shortExcerpt = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
 
             const isHidden = loopIndex >= initialShow ? 'hidden item-tamsu-extra' : '';
             const postElement = document.createElement("div");
             postElement.className = `tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm ${isHidden}`;
             
-            const editBtnHtml = isAdmin ? `<button onclick="openEditTamSu('${postId}')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 text-xs">✏️ Sửa bài viết</button>` : '';
+            const editBtnHtml = isAdmin ? `<button onclick="openEditTamSu('${postId}')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 text-xs ml-2">✏️ Sửa</button>` : '';
 
             postElement.innerHTML = `
-                <div class="flex justify-between items-start gap-2">
-                    <h3 class="font-bold text-slate-900 text-lg mb-2">${tieuDe}</h3>
-                    ${editBtnHtml}
+                <div>
+                    <h3 class="font-bold text-slate-900 text-lg cursor-pointer hover:text-teal-700 transition leading-snug" onclick="openTamSuModal('${postId}')">${tieuDe}</h3>
+                    ${mediaHtml}
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed whitespace-pre-line">${shortExcerpt}</p>
                 </div>
-                <p class="text-slate-700 mb-3 whitespace-pre-line leading-relaxed">${data.noiDung || ''}</p>
-                ${mediaHtml}
-                <small class="text-slate-400 block mt-3">Ngày đăng: ${data.ngayDang || ''}</small>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                    <span>📅 Ngày đăng: ${data.ngayDang || ''}</span>
+                    <div class="flex items-center">
+                        <button onclick="openTamSuModal('${postId}')" class="text-teal-600 font-semibold hover:underline">
+                            Đọc chi tiết →
+                        </button>
+                        ${editBtnHtml}
+                    </div>
+                </div>
                 
                 <div class="comments-section mt-4 pt-3 border-t border-slate-100">
                     <h4 class="font-semibold text-sm text-slate-800 mb-2">💬 Bình luận từ phụ huynh</h4>
