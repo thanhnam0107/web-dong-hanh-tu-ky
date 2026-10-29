@@ -1,5 +1,6 @@
 let editingPostId = null;       // Lưu ID bài viết đang sửa
 let editingCollection = null;   // Lưu tên collection
+let currentCommentsUnsubscribe = null;
 // =========================================================================
 // KHO 35 BÀI HỌC & CHIA SẺ TỪ MẸ LANA & BÉ SÚP
 // =========================================================================
@@ -816,35 +817,115 @@ window.openTinTucModal = function(index) {
 window.openTamSuModal = function(postId) {
     const item = tamSuDataMap[postId];
     if (!item) return;
+
+    // Hủy lắng nghe bình luận của bài trước (nếu có)
+    if (currentCommentsUnsubscribe) {
+        currentCommentsUnsubscribe();
+        currentCommentsUnsubscribe = null;
+    }
+
     document.getElementById('modal-tag').innerText = "💛 Góc Tâm Sự & Chia Sẻ Từ Phụ Huynh";
     document.getElementById('modal-title').innerText = item.tieuDe || item.tieude || 'Chia sẻ từ phụ huynh';
+    document.getElementById('modal-duration').innerText = "📅 Ngày đăng: " + (item.ngayDang || '');
     
     const contentEl = document.getElementById('modal-content');
-    contentEl.innerHTML = renderModalMedia(item.mediaUrl, item.mediaType) + `<div class="whitespace-pre-line leading-relaxed text-base"></div>`;
-    contentEl.lastElementChild.innerText = item.noiDung || '';
+    const mediaHtml = renderModalMedia(item.mediaUrl, item.mediaType);
 
-    document.getElementById('modal-duration').innerText = "📅 Ngày đăng: " + (item.ngayDang || '');
+    contentEl.innerHTML = `
+        ${mediaHtml}
+        <div id="modal-tam-su-body" class="whitespace-pre-line text-slate-700 leading-relaxed text-base"></div>
+        
+        <!-- KHU VỰC BÌNH LUẬN NẰM BÊN TRONG MODAL -->
+        <div class="comments-section mt-8 pt-6 border-t border-slate-200">
+            <h4 class="font-bold text-base text-slate-900 mb-3">💬 Bình luận & Chia sẻ từ bạn đọc</h4>
+            <div id="comments-list-modal" class="space-y-3 mb-4">
+                <p class="text-xs text-slate-400 italic">Đang tải bình luận...</p>
+            </div>
+            
+            <div id="comment-form-modal" class="mt-4" style="display: ${currentUser ? 'block' : 'none'};">
+                <textarea id="comment-input-modal" rows="3" placeholder="Viết chia sẻ, lời động viên của bạn..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 shadow-sm"></textarea>
+                <div class="flex justify-end mt-2">
+                    <button onclick="guiBinhLuanModal('${postId}')" class="bg-teal-600 text-white text-xs px-5 py-2.5 rounded-lg font-semibold hover:bg-teal-700 transition shadow-sm">
+                        Gửi bình luận
+                    </button>
+                </div>
+            </div>
+            
+            <div id="login-prompt-modal" class="text-amber-800 bg-amber-50 border border-amber-200 px-4 py-3 rounded-xl text-xs italic mt-3" style="display: ${currentUser ? 'none' : 'block'};">
+                🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập Google</button> để viết bình luận (chống spam).
+            </div>
+        </div>
+    `;
+
+    document.getElementById('modal-tam-su-body').innerText = item.noiDung || '';
     document.getElementById('article-modal').classList.remove('hidden');
+
+    // Bắt đầu tải và lắng nghe bình luận realtime cho riêng bài viết này
+    taiBinhLuanModal(postId);
 };
 
 window.closeArticleModal = function() {
+    if (currentCommentsUnsubscribe) {
+        currentCommentsUnsubscribe();
+        currentCommentsUnsubscribe = null;
+    }
     document.getElementById('article-modal').classList.add('hidden');
 };
 
-window.evaluateChecklist = function() {
-    const checks = document.querySelectorAll('.check-item:checked');
-    const count = checks.length;
-    const resultBox = document.getElementById('result-box');
-    if (!resultBox) return;
+function taiBinhLuanModal(postId) {
+    if (!db) return;
+    try {
+        const commentsRef = collection(db, "tam_su", postId, "comments");
+        currentCommentsUnsubscribe = onSnapshot(commentsRef, (snapshot) => {
+            const listDiv = document.getElementById("comments-list-modal");
+            if (!listDiv) return;
+            if (snapshot.empty) {
+                listDiv.innerHTML = `<p class="text-xs text-slate-400 italic">Chưa có bình luận nào. Hãy là người đầu tiên chia sẻ!</p>`;
+                return;
+            }
+            listDiv.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const c = doc.data();
+                listDiv.innerHTML += `
+                    <div class="comment-item flex items-start bg-slate-50 p-3 rounded-xl text-sm border border-slate-100">
+                        <img src="${c.anhDaiDien || 'https://via.placeholder.com/32'}" width="32" height="32" class="rounded-full mr-3 mt-0.5 border border-slate-200 object-cover">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <strong class="text-slate-900 text-xs">${c.tenNguoiDung}</strong>
+                                <span class="text-[11px] text-slate-400">${c.thoiGian || ''}</span>
+                            </div>
+                            <p class="text-slate-700 text-sm mt-1 leading-relaxed">${c.noiDungBinhLuan}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    } catch (e) {
+        console.error("Lỗi realtime bình luận modal: ", e);
+    }
+}
 
-    resultBox.classList.remove('hidden', 'bg-amber-50', 'border-amber-300', 'text-amber-900', 'bg-teal-50', 'border-teal-300', 'text-teal-900');
+window.guiBinhLuanModal = async function(postId) {
+    const input = document.getElementById("comment-input-modal");
+    if (!input) return;
+    const noiDung = input.value.trim();
+    if (!noiDung) return;
 
-    if (count >= 2) {
-        resultBox.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-900');
-        resultBox.innerHTML = `<strong>Khuyến nghị ưu tiên (${count}/4 dấu hiệu):</strong> Trẻ đang có một số dấu hiệu cần lưu ý về giao tiếp xã hội và chú ý chung. Bố mẹ nên bắt đầu áp dụng ngay các bài học trong mục "Giao tiếp & Ngôn ngữ" bên trên và đưa trẻ đi đánh giá phát triển chuyên sâu.`;
-    } else {
-        resultBox.classList.add('bg-teal-50', 'border-teal-300', 'text-teal-900');
-        resultBox.innerHTML = `<strong>Ghi nhận (${count}/4 dấu hiệu):</strong> Bạn hãy tiếp tục theo dõi sát các mốc phát triển giao tiếp của con và thực hành các bài tập tương tác hai chiều mỗi ngày.`;
+    if (!currentUser) {
+        alert("Vui lòng đăng nhập Google trước khi gửi bình luận!");
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, "tam_su", postId, "comments"), {
+            tenNguoiDung: currentUser.displayName || "Phụ huynh",
+            anhDaiDien: currentUser.photoURL || "",
+            noiDungBinhLuan: noiDung,
+            thoiGian: new Date().toLocaleDateString("vi-VN")
+        });
+        input.value = "";
+    } catch (error) {
+        alert("Lỗi khi gửi bình luận: " + error.message);
     }
 };
 
@@ -937,12 +1018,19 @@ try {
 }
 
 function capNhatKhungBinhLuan() {
+    // 1. Cập nhật các ô bình luận cũ ngoài trang chủ (nếu còn)
     document.querySelectorAll('.comment-form-box').forEach(box => {
         box.style.display = currentUser ? 'block' : 'none';
     });
     document.querySelectorAll('.login-prompt-msg').forEach(msg => {
         msg.style.display = currentUser ? 'none' : 'block';
     });
+
+    // 2. Cập nhật khung bình luận bên trong Modal đọc chi tiết bài viết
+    const commentFormModal = document.getElementById('comment-form-modal');
+    const loginPromptModal = document.getElementById('login-prompt-modal');
+    if (commentFormModal) commentFormModal.style.display = currentUser ? 'block' : 'none';
+    if (loginPromptModal) loginPromptModal.style.display = currentUser ? 'none' : 'block';
 }
 
 async function loadBaiHocFromFirestore() {
@@ -1062,7 +1150,7 @@ async function loadTamSu() {
 
         const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
         tamSuDataMap = {};
-        const initialShow = 3; // Chỉ hiện 3 bài tâm sự đầu tiên
+        const initialShow = 3; // Chỉ hiện 3 bài đầu tiên trên trang chủ
         let loopIndex = 0;
 
         querySnapshot.forEach((docSnap) => {
@@ -1071,7 +1159,6 @@ async function loadTamSu() {
             tamSuDataMap[postId] = data;
             const tieuDe = data.tieuDe || data.tieude || 'Chia sẻ từ phụ huynh';
 
-            // Thu nhỏ hình ảnh gọn gàng theo tỷ lệ 16:9 tương tự mục Bài học
             let mediaHtml = '';
             if (data.mediaUrl && data.mediaUrl !== '') {
                 if (data.mediaType === 'image') {
@@ -1081,16 +1168,16 @@ async function loadTamSu() {
                 }
             }
 
-            // Cắt ngắn văn bản hiển thị ngoài thẻ
             const fullText = data.noiDung || '';
             const shortExcerpt = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
 
             const isHidden = loopIndex >= initialShow ? 'hidden item-tamsu-extra' : '';
             const postElement = document.createElement("div");
-            postElement.className = `tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm ${isHidden}`;
+            postElement.className = `tam-su-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition ${isHidden}`;
             
-            const editBtnHtml = isAdmin ? `<button onclick="openEditTamSu('${postId}')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 text-xs ml-2">✏️ Sửa</button>` : '';
+            const editBtnHtml = isAdmin ? `<button onclick="openEditTamSu('${postId}')" class="text-amber-600 font-semibold border border-amber-500 px-2.5 py-1 rounded-lg hover:bg-amber-50 text-xs ml-2">✏️ Sửa</button>` : '';
 
+            // Thẻ ngoài trang chủ hoàn toàn sạch sẽ, chỉ có tiêu đề, ảnh, đoạn trích và nút mở chi tiết
             postElement.innerHTML = `
                 <div>
                     <h3 class="font-bold text-slate-900 text-lg cursor-pointer hover:text-teal-700 transition leading-snug" onclick="openTamSuModal('${postId}')">${tieuDe}</h3>
@@ -1098,31 +1185,17 @@ async function loadTamSu() {
                     <p class="text-slate-600 text-sm mt-3 leading-relaxed whitespace-pre-line">${shortExcerpt}</p>
                 </div>
 
-                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
                     <span>📅 Ngày đăng: ${data.ngayDang || ''}</span>
                     <div class="flex items-center">
                         <button onclick="openTamSuModal('${postId}')" class="text-teal-600 font-semibold hover:underline">
-                            Đọc chi tiết →
+                            Đọc chi tiết & Bình luận →
                         </button>
                         ${editBtnHtml}
                     </div>
                 </div>
-                
-                <div class="comments-section mt-4 pt-3 border-t border-slate-100">
-                    <h4 class="font-semibold text-sm text-slate-800 mb-2">💬 Bình luận từ phụ huynh</h4>
-                    <div id="comments-list-${postId}" class="comments-list space-y-2 mb-3"></div>
-                    
-                    <div id="comment-form-wrapper-${postId}" class="comment-form-box mt-3" style="display: ${currentUser ? 'block' : 'none'};">
-                        <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm mb-2 focus:outline-none focus:border-teal-600"></textarea>
-                        <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">Gửi bình luận</button>
-                    </div>
-                    <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
-                        🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập Google</button> để bình luận (chống spam).
-                    </p>
-                </div>
             `;
             container.appendChild(postElement);
-            taiBinhLuanRealtime(postId);
             loopIndex++;
         });
 
@@ -1131,7 +1204,7 @@ async function loadTamSu() {
             btnWrapper.className = "flex justify-center mt-4 w-full";
             btnWrapper.innerHTML = `
                 <button onclick="document.querySelectorAll('.item-tamsu-extra').forEach(el => el.classList.remove('hidden')); this.parentElement.remove();" class="text-teal-700 text-sm font-semibold border border-teal-600 bg-white px-6 py-2.5 rounded-full hover:bg-teal-50 transition shadow-sm">
-                    ⬇️ Xem tất cả tâm sự
+                    ⬇️ Xem tất cả (${loopIndex}) tâm sự
                 </button>
             `;
             container.appendChild(btnWrapper);
