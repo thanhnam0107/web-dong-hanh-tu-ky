@@ -717,7 +717,7 @@ function renderCards() {
         if (guide.mediaUrl && guide.mediaUrl !== '') {
             if (guide.mediaType === 'image') {
                 // Ép tỷ lệ 16:9 bằng aspect-video và object-cover để cắt cúp ảnh hoàn hảo
-                mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-video object-cover"></div>`;
+               mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm bg-slate-100"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-square object-contain"></div>`;
             } else if (guide.mediaType === 'video') {
                 mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${guide.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
             }
