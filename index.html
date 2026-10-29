@@ -2,14 +2,14 @@
 <html lang="vi">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-21DZSYZ6X5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-21DZSYZ6X5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-21DZSYZ6X5');
-</script>
+      gtag('config', 'G-21DZSYZ6X5');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đồng Hành Cùng Con - Phùng Lan Anh (Lana) Can Thiệp Tự Kỷ Tại Nhà</title>
@@ -25,11 +25,6 @@
     <meta property="og:url" content="https://congdongtuky.vn/">
     <meta property="og:type" content="website">
 
-    <!-- Twitter Card (Dành cho nền tảng X và luồng tin tức) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Đồng Hành Cùng Con - Can thiệp Tự kỷ tại nhà">
-    <meta name="twitter:description" content="Hệ thống kiến thức chuẩn khoa học giúp cha mẹ đồng hành cùng trẻ.">
-    <meta name="twitter:image" content="https://congdongtuky.vn/chan-dung-lan-anh.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -53,20 +48,19 @@
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <a href="#" class="text-xl font-bold text-teal-700">🌱 Đồng Hành Cùng Con</a>
             <nav class="hidden md:flex space-x-6 font-medium text-slate-600">
-                <a href="#gioi-thieu" class="hover:text-teal-600 transition">Người sáng lập</a>
-                <a href="#tin-tuc" class="hover:text-teal-600 transition">Tin tức</a>
+                <!-- Đã sắp xếp lại thứ tự Menu cho khớp với cấu trúc mới -->
                 <a href="#lo-trinh" class="hover:text-teal-600 transition">Thư viện Bài học</a>
+                <a href="#sang-loc" class="hover:text-teal-600 transition">Sàng lọc sớm</a>
                 <a href="#tam-su" class="hover:text-teal-600 transition">Tâm sự</a>
-                <a href="#sang-loc" class="hover:text-teal-600 transition">Sàng lọc nhanh</a>
+                <a href="#tin-tuc" class="hover:text-teal-600 transition">Tin tức</a>
+                <a href="#gioi-thieu" class="hover:text-teal-600 transition">Về Phùng Lan Anh</a>
             </nav>
             <div class="flex items-center space-x-3">
-                <!-- Nút Quản trị mặc định ẩn (hidden), chỉ hiện khi đúng email Admin đăng nhập -->
                 <button id="admin-btn" onclick="toggleAdminModal()" class="hidden text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-2 rounded-lg font-semibold border border-amber-300 transition">
                     ⚙️ Quản trị (Đăng bài)
                 </button>
-                <!-- Khu vực Đăng nhập Google -->
                 <button id="login-btn" onclick="dangNhapGoogle()" class="text-xs bg-white hover:bg-slate-100 text-slate-700 px-3 py-2 rounded-lg font-medium border border-slate-300 transition flex items-center gap-1.5 shadow-sm">
-                    <span>🔑 Đăng nhập Google</span>
+                    <span>🔑 Đăng nhập</span>
                 </button>
                 <div id="user-info" class="hidden items-center space-x-2">
                     <img id="user-avatar" src="" alt="Avatar" class="w-7 h-7 rounded-full border border-teal-500">
@@ -77,7 +71,7 @@
         </div>
     </header>
 
-    <!-- 2. PHẦN MỞ ĐẦU (HERO BANNER CHÍNH) -->
+    <!-- 2. BANNER CHÍNH -->
     <section class="hero-bg py-16 md:py-24 px-4 text-white">
         <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-10 items-center">
             <div class="md:col-span-7 text-left">
@@ -92,10 +86,7 @@
                 </p>
                 <div class="mt-8 flex flex-wrap gap-4">
                     <a href="#lo-trinh" class="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition shadow-lg">
-                        Khám phá 35 bài học thực chiến
-                    </a>
-                    <a href="#gioi-thieu" class="bg-white/10 border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition">
-                        Về người sáng lập
+                        Khám phá bài học thực chiến
                     </a>
                 </div>
             </div>
@@ -105,75 +96,37 @@
         </div>
     </section>
 
-    <!-- 3. KHỐI TĨNH GIỚI THIỆU PHÙNG LAN ANH & TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM Y KHOA (NGAY DƯỚI BANNER CHÍNH) -->
-    <section id="gioi-thieu" class="py-14 px-4 bg-white border-b border-slate-200">
-        <div class="max-w-6xl mx-auto">
-            <!-- Thẻ div tĩnh giới thiệu người sáng lập -->
-            <div class="bg-gradient-to-br from-teal-50/80 to-slate-50 p-6 md:p-10 rounded-2xl border border-teal-200 shadow-sm">
-                <div class="grid md:grid-cols-12 gap-8 items-center">
-                    <!-- Ảnh chân dung -->
-                    <div class="md:col-span-4 flex flex-col items-center text-center">
-                        <img src="chan-dung-lan-anh.jpg" onerror="this.src='hinh-nen.jpg'" alt="Phùng Lan Anh - Người sáng lập" class="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover shadow-lg border-4 border-teal-600/30">
-                        <span class="mt-3 text-xs font-semibold text-teal-800 bg-teal-100 px-3 py-1 rounded-full">
-                            MSc Psychology , CityU Hong Kong
-                        </span>
-                    </div>
-                    <!-- Nội dung giới thiệu & Sứ mệnh -->
-                    <div class="md:col-span-8">
-                        <span class="text-teal-700 font-bold text-xs md:text-sm uppercase tracking-wider">Hồ sơ Người sáng lập</span>
-                        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
-                            Phùng Lan Anh - Người sáng lập Dự án 'Cha mẹ đồng hành cùng con tự kỷ'
-                        </h2>
-                        <p class="mt-4 text-slate-700 leading-relaxed text-base">
-                            Xin chào, mình là <strong>Phùng Lan Anh (Lana)</strong> — mẹ của em bé Súp thuộc phổ tự kỷ (ASD) và Thạc sĩ ngành Tâm lý học tại <strong>City University of Hong Kong (CityU)</strong>. Sau khi con nhận chẩn đoán lúc 2 tuổi, mình đã lựa chọn tự can thiệp cho con 100% tại nhà dựa trên nền tảng Phân tích Hành vi Ứng dụng (<strong>ABA</strong>) kết hợp các mô hình can thiệp sớm chuẩn khoa học chứng cứ (<strong>ESDM, PRT & Floortime</strong>).
-                        </p>
-                        <p class="mt-3 text-slate-700 leading-relaxed text-base">
-                            <strong>Sứ mệnh của dự án:</strong> Chuyển hóa những kiến thức học thuật quốc tế thành hướng dẫn thực hành bình dị, dễ hiểu và hoàn toàn miễn phí cho phụ huynh Việt Nam; giúp cha mẹ thoát khỏi sự hoang mang, làm chủ kỹ năng dạy con trong sinh hoạt hàng ngày và vững tâm đồng hành cùng con phát triển tối đa tiềm năng.
-                        </p>
-                        <div class="grid sm:grid-cols-3 gap-4 mt-6">
-                            <div class="bg-white p-4 rounded-xl border border-slate-200">
-                                <div class="font-bold text-teal-700 text-sm">🎓 Tâm lý học Quốc tế</div>
-                                <p class="text-xs text-slate-600 mt-1">Đào tạo bài bản tại CityU Hong Kong (Top 7 Châu Á, top 52 toàn cầu - QS Ranking), nằm trong top 3% các trường đại học hàng đầu thế giới.).</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-xl border border-slate-200">
-                                <div class="font-bold text-teal-700 text-sm">🧩 Chuẩn Khoa học</div>
-                                <p class="text-xs text-slate-600 mt-1">Ứng dụng thực tiễn ABA, ESDM, PRT & Floortime.</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-xl border border-slate-200">
-                                <div class="font-bold text-teal-700 text-sm">💛 Đồng hành Tận tâm</div>
-                                <p class="text-xs text-slate-600 mt-1">Đồng cảm với bố mẹ vip, tôn trọng sự đa dạng thần kinh của mỗi trẻ.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
+    <!-- 3. MINI-BIO (Thanh danh tính rút gọn tăng độ tin cậy) -->
+    <section class="bg-teal-700 text-teal-50 py-3 px-4 shadow-inner">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 text-sm font-medium text-center">
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Sáng lập bởi Phùng Lan Anh (Lana)</span>
+            <span class="hidden md:inline text-teal-500">|</span>
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 8.56l-1.12.48a1 1 0 00-.58.914l.192 6.042a1 1 0 00.336.65l2.775 2.775 1.84-1.84-1.37-1.37a1 1 0 01-.26-.547l-.145-4.542 4.195 1.798a1 1 0 00.787 0l7-3a1 1 0 000-1.84L14.75 9.053a.999.999 0 01-.356.257l-4 1.714a1 1 0 11-.788-1.838l2.727-1.168-1.94-.831a1 1 0 00-.788 0l-7 3z"></path></svg> Thạc sĩ Tâm lý học (CityU Hong Kong)</span>
+            <span class="hidden md:inline text-teal-500">|</span>
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg> Khoa học & Thực chứng</span>
         </div>
     </section>
-    <!-- KHO TÀI NGUYÊN MIỄN PHÍ -->
-<section class="max-w-6xl mx-auto px-4 py-8">
-    <div class="bg-teal-50 border border-teal-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-        <div>
-            <span class="bg-teal-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Tài nguyên miễn phí</span>
-            <h3 class="text-2xl font-bold text-slate-900 mt-3 mb-2">Sổ tay theo dõi hành vi ABC</h3>
-            <p class="text-slate-600 text-sm md:text-base">Công cụ chuẩn chuyên gia giúp ba mẹ ghi chép và tìm ra nguyên nhân gốc rễ đằng sau mỗi lần con ăn vạ hay bùng nổ cảm xúc (Meltdown).</p>
-        </div>
-        <!-- Lưu ý: href phải khớp với tên file PDF bạn đã tải lên GitHub -->
-        <a href="/so-tay-abc.pdf" download="So-tay-theo-doi-hanh-vi-ABC.pdf" class="shrink-0 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition duration-300 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-            </svg>
-            Tải Sổ Tay (PDF)
-        </a>
-    </div>
-</section>
 
-    <!-- 4. THƯ VIỆN 35 BÀI HỌC -->
-    <section id="lo-trinh" class="max-w-6xl mx-auto px-4 py-14">
+    <!-- 4. KHO TÀI NGUYÊN MIỄN PHÍ -->
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-teal-50 border border-teal-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+            <div>
+                <span class="bg-teal-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Tài nguyên miễn phí</span>
+                <h3 class="text-2xl font-bold text-slate-900 mt-3 mb-2">Sổ tay theo dõi hành vi ABC</h3>
+                <p class="text-slate-600 text-sm md:text-base">Công cụ chuẩn chuyên gia giúp ba mẹ ghi chép và tìm ra nguyên nhân gốc rễ đằng sau mỗi lần con ăn vạ hay bùng nổ cảm xúc (Meltdown).</p>
+            </div>
+            <a href="/so-tay-abc.pdf" download="So-tay-theo-doi-hanh-vi-ABC.pdf" class="shrink-0 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition duration-300 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Tải Sổ Tay (PDF)
+            </a>
+        </div>
+    </section>
+
+    <!-- 5. THƯ VIỆN BÀI HỌC CỐT LÕI -->
+    <section id="lo-trinh" class="max-w-6xl mx-auto px-4 py-8 md:py-12">
         <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-6 gap-4">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Thư viện Kiến thức & Bài học Thực chiến</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">📚 Thư viện Kiến thức & Bài học Thực chiến</h2>
                 <p class="text-slate-600 mt-1">Được phân loại khoa học theo từng mảng phát triển của trẻ và tâm lý cha mẹ:</p>
             </div>
             <div class="w-full md:w-72">
@@ -182,61 +135,17 @@
         </div>
 
         <div class="flex flex-wrap gap-2.5 mb-8">
-            <button onclick="filterGuides('all', this)" class="cat-btn active bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                Tất cả bài viết (35)
-            </button>
-            <button onclick="filterGuides('nen-tang', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                🧠 Hiểu đúng về Tự kỷ & Khoa học
-            </button>
-            <button onclick="filterGuides('giao-tiep', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                💬 Giao tiếp & Ngôn ngữ
-            </button>
-            <button onclick="filterGuides('hanh-vi', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                🧩 Hành vi & Kỷ luật tích cực ABA
-            </button>
-            <button onclick="filterGuides('tu-lap', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                🎈 Chơi, Giác quan & Học tập
-            </button>
-            <button onclick="filterGuides('tam-su', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">
-                💛 Nhật ký Mẹ Súp & Tâm lý Cha mẹ
-            </button>
+            <button onclick="filterGuides('all', this)" class="cat-btn active bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">Tất cả bài viết</button>
+            <button onclick="filterGuides('nen-tang', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">🧠 Hiểu đúng về Tự kỷ</button>
+            <button onclick="filterGuides('giao-tiep', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">💬 Giao tiếp & Ngôn ngữ</button>
+            <button onclick="filterGuides('hanh-vi', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">🧩 Hành vi & Kỷ luật</button>
+            <button onclick="filterGuides('tu-lap', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">🎈 Chơi & Cảm giác</button>
+            <button onclick="filterGuides('tam-su', this)" class="cat-btn bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-100 transition">💛 Tâm lý Cha mẹ</button>
         </div>
-
         <div id="guide-container" class="grid md:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 5. MỤC TIN TỨC -->
-    <section id="tin-tuc" class="bg-white border-y border-slate-200 py-14 px-4">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900">📰 Tin tức & Hoạt động Cộng đồng</h2>
-                    <p class="text-slate-600 text-sm mt-1">Cập nhật kiến thức khoa học mới nhất và các sự kiện hỗ trợ phụ huynh.</p>
-                </div>
-            </div>
-            <div id="tin-tuc-container" class="grid md:grid-cols-2 gap-6">
-                <p class="text-slate-500 italic">Đang tải tin tức...</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. MỤC TÂM SỰ & BÌNH LUẬN (YÊU CẦU ĐĂNG NHẬP GOOGLE) -->
-    <section id="tam-su" class="max-w-6xl mx-auto px-4 py-14">
-        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-            <div>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">💛 Góc Tâm Sự & Chia Sẻ Từ Phụ Huynh</h2>
-                <p class="text-slate-600 text-sm mt-1">Nơi các bậc cha mẹ cùng nhau giãi bày và kết nối. Bắt buộc đăng nhập Google để viết bình luận nhằm định danh và chống spam.</p>
-            </div>
-            <button onclick="dangNhapGoogle()" id="tam-su-login-btn" class="self-start bg-teal-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal-700 transition shadow-sm">
-                🔑 Đăng nhập Google để tham gia bình luận
-            </button>
-        </div>
-        <div id="tam-su-container" class="space-y-6">
-            <p class="text-slate-500 italic">Đang tải bài viết tâm sự...</p>
-        </div>
-    </section>
-
-    <!-- 7. CÔNG CỤ KIỂM TRA NHANH DẤU HIỆU SỚM -->
+    <!-- 6. CÔNG CỤ SÀNG LỌC SỚM -->
     <section id="sang-loc" class="bg-white border-y border-slate-200 py-14 px-4">
         <div class="max-w-3xl mx-auto">
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Bảng kiểm tra nhanh dấu hiệu giao tiếp sớm</h2>
@@ -266,7 +175,80 @@
         </div>
     </section>
 
-    <!-- 8. MODAL ĐỌC CHI TIẾT BÀI VIẾT -->
+    <!-- 7. GÓC TÂM SỰ & BÌNH LUẬN -->
+    <section id="tam-su" class="max-w-6xl mx-auto px-4 py-14">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">💛 Góc Tâm Sự & Chia Sẻ Từ Phụ Huynh</h2>
+                <p class="text-slate-600 text-sm mt-1">Nơi các bậc cha mẹ cùng nhau giãi bày và kết nối. Bắt buộc đăng nhập Google để viết bình luận nhằm định danh và chống spam.</p>
+            </div>
+            <button onclick="dangNhapGoogle()" id="tam-su-login-btn" class="self-start bg-teal-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal-700 transition shadow-sm">
+                🔑 Đăng nhập Google để tham gia bình luận
+            </button>
+        </div>
+        <div id="tam-su-container" class="space-y-6">
+            <p class="text-slate-500 italic">Đang tải bài viết tâm sự...</p>
+        </div>
+    </section>
+
+    <!-- 8. TIN TỨC CHUYÊN NGÀNH -->
+    <section id="tin-tuc" class="bg-white border-y border-slate-200 py-14 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900">📰 Tin tức & Hoạt động Cộng đồng</h2>
+                    <p class="text-slate-600 text-sm mt-1">Cập nhật kiến thức khoa học mới nhất và các sự kiện hỗ trợ phụ huynh.</p>
+                </div>
+            </div>
+            <div id="tin-tuc-container" class="grid md:grid-cols-2 gap-6">
+                <p class="text-slate-500 italic">Đang tải tin tức...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. GIỚI THIỆU NGƯỜI SÁNG LẬP (Đẩy xuống cuối) -->
+    <section id="gioi-thieu" class="py-14 px-4 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-gradient-to-br from-teal-50/80 to-slate-50 p-6 md:p-10 rounded-2xl border border-teal-200 shadow-sm">
+                <div class="grid md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-4 flex flex-col items-center text-center">
+                        <img src="chan-dung-lan-anh.jpg" onerror="this.src='hinh-nen.jpg'" alt="Phùng Lan Anh - Người sáng lập" class="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover shadow-lg border-4 border-teal-600/30">
+                        <span class="mt-3 text-xs font-semibold text-teal-800 bg-teal-100 px-3 py-1 rounded-full">
+                            MSc Psychology, CityU Hong Kong
+                        </span>
+                    </div>
+                    <div class="md:col-span-8">
+                        <span class="text-teal-700 font-bold text-xs md:text-sm uppercase tracking-wider">Hồ sơ Người sáng lập</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
+                            Phùng Lan Anh - Hành trình từ trái tim của mẹ
+                        </h2>
+                        <p class="mt-4 text-slate-700 leading-relaxed text-base">
+                            Xin chào, mình là <strong>Phùng Lan Anh (Lana)</strong> — mẹ của em bé Súp thuộc phổ tự kỷ (ASD) và Thạc sĩ ngành Tâm lý học tại <strong>City University of Hong Kong (CityU)</strong>. Sau khi con nhận chẩn đoán lúc 2 tuổi, mình đã lựa chọn tự can thiệp cho con 100% tại nhà dựa trên nền tảng Phân tích Hành vi Ứng dụng (<strong>ABA</strong>) kết hợp các mô hình can thiệp sớm chuẩn khoa học chứng cứ (<strong>ESDM, PRT & Floortime</strong>).
+                        </p>
+                        <p class="mt-3 text-slate-700 leading-relaxed text-base">
+                            <strong>Sứ mệnh của dự án:</strong> Chuyển hóa những kiến thức học thuật quốc tế thành hướng dẫn thực hành bình dị, dễ hiểu và hoàn toàn miễn phí cho phụ huynh Việt Nam; giúp cha mẹ thoát khỏi sự hoang mang, làm chủ kỹ năng dạy con trong sinh hoạt hàng ngày và vững tâm đồng hành cùng con phát triển tối đa tiềm năng.
+                        </p>
+                        <div class="grid sm:grid-cols-3 gap-4 mt-6">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <div class="font-bold text-teal-700 text-sm">🎓 Tâm lý học Quốc tế</div>
+                                <p class="text-xs text-slate-600 mt-1">Đào tạo bài bản tại CityU Hong Kong (Top 7 Châu Á, top 52 toàn cầu - QS Ranking).</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <div class="font-bold text-teal-700 text-sm">🧩 Chuẩn Khoa học</div>
+                                <p class="text-xs text-slate-600 mt-1">Ứng dụng thực tiễn ABA, ESDM, PRT & Floortime.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <div class="font-bold text-teal-700 text-sm">💛 Đồng hành Tận tâm</div>
+                                <p class="text-xs text-slate-600 mt-1">Đồng cảm sâu sắc, tôn trọng sự đa dạng thần kinh của mỗi trẻ.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. MODAL ĐỌC CHI TIẾT BÀI VIẾT (Ẩn mặc định) -->
     <div id="article-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[88vh] overflow-y-auto p-6 md:p-10 shadow-2xl">
             <div class="flex justify-between items-start border-b border-slate-100 pb-4 sticky top-0 bg-white pt-1">
@@ -279,12 +261,12 @@
             <div id="modal-content" class="mt-6 text-slate-700 leading-relaxed space-y-4 whitespace-pre-line text-base"></div>
             <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
                 <span id="modal-duration" class="text-xs font-medium text-slate-500"></span>
-                <button onclick="closeArticleModal()" class="bg-teal-600 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-teal-700">Đóng bài học</button>
+                <button onclick="closeArticleModal()" class="bg-teal-600 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-teal-700">Đóng bài viết</button>
             </div>
         </div>
     </div>
 
-    <!-- 9. BẢNG QUẢN TRỊ ADMIN (ĐĂNG TIN TỨC / TÂM SỰ / BÀI HỌC TRỰC TIẾP LÊN FIREBASE) -->
+    <!-- 11. BẢNG QUẢN TRỊ ADMIN (Đăng bài trực tiếp) -->
     <div id="admin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -297,16 +279,14 @@
                     <select id="admin-post-type" onchange="toggleAdminFields()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-teal-50 font-semibold text-teal-900">
                         <option value="tin_tuc">📰 Đăng vào mục Tin tức (Lưu trực tiếp lên Firebase)</option>
                         <option value="tam_su">💛 Đăng vào mục Tâm sự (Lưu trực tiếp lên Firebase)</option>
-                        <option value="bai_hoc">📚 Đăng vào Thư viện Bài học (35+ bài)</option>
+                        <option value="bai_hoc">📚 Đăng vào Thư viện Bài học</option>
                     </select>
-                    <!-- Ô nhập link nguồn gốc (chỉ hiện khi chọn đăng Tin tức) -->
-<div id="admin-news-extra" class="space-y-4">
-    <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-1">🔗 Đường link nguồn gốc (URL bản quyền chuẩn)</label>
-        <input id="admin-source-link" type="url" placeholder="https://example.com/nghien-cuu-goc" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-600">
-        <p class="text-[11px] text-slate-500 mt-1">Dán link bài báo hoặc nghiên cứu gốc để đảm bảo minh bạch bản quyền và tôn trọng tác giả.</p>
-    </div>
-</div>
+                    <div id="admin-news-extra" class="space-y-4">
+                        <div class="mt-4">
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">🔗 Đường link nguồn gốc (URL bản quyền chuẩn)</label>
+                            <input id="admin-source-link" type="url" placeholder="https://example.com/nghien-cuu-goc" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-600">
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Tiêu đề bài viết *</label>
@@ -338,25 +318,18 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Nội dung chi tiết *</label>
                     <textarea id="admin-content" rows="6" placeholder="Nhập toàn bộ nội dung bài viết vào đây..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></textarea>
                 </div>
-                <!-- Chèn thêm phần nhập URL hình ảnh/Video -->
-<div class="mb-4">
-    <label class="block text-slate-700 font-semibold mb-2" for="mediaUrl">
-        URL Hình ảnh hoặc Video (Tùy chọn)
-    </label>
-    <input type="url" id="mediaUrl" placeholder="Ví dụ: https://congdongtuky.vn/anh-minh-hoa.jpg HOẶC https://www.youtube.com/embed/..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
-    <p class="text-xs text-slate-500 mt-1">Hỗ trợ link ảnh (jpg, png, gif) hoặc link nhúng video (YouTube iframe URL).</p>
-</div>
-
-<div class="mb-4">
-    <label class="block text-slate-700 font-semibold mb-2" for="mediaType">
-        Loại phương tiện (Nếu có URL ở trên)
-    </label>
-    <select id="mediaType" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
-        <option value="none">Không có media</option>
-        <option value="image">Hình ảnh</option>
-        <option value="video">Video (YouTube/Vimeo)</option>
-    </select>
-</div>
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-semibold mb-2" for="mediaUrl">URL Hình ảnh hoặc Video (Tùy chọn)</label>
+                    <input type="url" id="mediaUrl" placeholder="Ví dụ: https://congdongtuky.vn/anh.jpg HOẶC https://www.youtube.com/embed/..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-semibold mb-2" for="mediaType">Loại phương tiện</label>
+                    <select id="mediaType" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
+                        <option value="none">Không có media</option>
+                        <option value="image">Hình ảnh</option>
+                        <option value="video">Video (YouTube/Vimeo)</option>
+                    </select>
+                </div>
                 <button onclick="submitAdminPost()" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">
                     🚀 Xuất bản ngay lên Website
                 </button>
@@ -364,19 +337,20 @@
         </div>
     </div>
 
-    <!-- 10. CHÂN TRANG -->
-    <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm">
-        <p>© 2026 Đồng Hành Cùng Con (congdongtuky.vn) - Sáng lập bởi Phùng Lan Anh (Lana) (MSc Psychology Candidate, CityU Hong Kong).</p>
-    </footer>
-    <!-- Tuyên bố miễn trừ trách nhiệm y khoa chuyển xuống dưới cùng, font chữ nhỏ -->
-<div class="max-w-6xl mx-auto px-4 mb-8">
-    <div class="bg-slate-100 border-l-2 border-amber-500 p-3 rounded-r-lg text-[11px] text-slate-600 leading-normal">
-        <strong class="font-semibold text-slate-800 uppercase">Miễn trừ trách nhiệm y khoa:</strong> 
-        Mọi nội dung và bài viết tại congdongtuky.vn chỉ mang tính chất giáo dục và chia sẻ kinh nghiệm thực hành tại nhà, không thay thế cho chẩn đoán hay phác đồ điều trị y khoa chuyên sâu. Phụ huynh vui lòng tham vấn bác sĩ hoặc chuyên gia y tế khi cần đưa ra quyết định liên quan đến sức khỏe của trẻ.
+    <!-- 12. Tuyên bố miễn trừ trách nhiệm y khoa (Footer) -->
+    <div class="max-w-6xl mx-auto px-4 mb-8">
+        <div class="bg-slate-100 border-l-2 border-amber-500 p-3 rounded-r-lg text-[11px] text-slate-600 leading-normal">
+            <strong class="font-semibold text-slate-800 uppercase">Miễn trừ trách nhiệm y khoa:</strong> 
+            Mọi nội dung và bài viết tại congdongtuky.vn chỉ mang tính chất giáo dục và chia sẻ kinh nghiệm thực hành tại nhà, không thay thế cho chẩn đoán hay phác đồ điều trị y khoa chuyên sâu. Phụ huynh vui lòng tham vấn bác sĩ chuyên khoa hoặc chuyên gia lâm sàng khi cần đưa ra quyết định liên quan đến sức khỏe và can thiệp cho trẻ.
+        </div>
     </div>
-</div>
 
-    <!-- NHÚNG FILE app.js DƯỚI DẠNG MODULE -->
+    <!-- 13. CHÂN TRANG -->
+    <footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm">
+        <p>© 2026 Đồng Hành Cùng Con (congdongtuky.vn) - Sáng lập bởi Phùng Lan Anh (Lana) (MSc Psychology, CityU Hong Kong).</p>
+    </footer>
+
+    <!-- NHÚNG FILE APP.JS -->
     <script type="module" src="app.js"></script>
 </body>
 </html>
