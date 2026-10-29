@@ -766,51 +766,6 @@ function renderCards() {
         `;
     }
 }
-
-    const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
-
-    filtered.forEach((guide) => {
-        let mediaHtml = '';
-        if (guide.mediaUrl && guide.mediaUrl !== '') {
-            if (guide.mediaType === 'image') {
-                mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
-            } else if (guide.mediaType === 'video') {
-                mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${guide.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-            }
-        }
-        const realIndex = guidesData.indexOf(guide);
-        const guideTitle = guide.title || guide.tieuDe || '';
-        const guideContent = guide.content || guide.noiDung || '';
-        const rawText = guide.summary || guideContent || '';
-        const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
-
-        // Nút Sửa truyền theo chỉ số realIndex tuyệt đối an toàn, cho phép sửa cả bài gốc lẫn bài trên Firebase
-        const editBtnHtml = isAdmin ? `<button onclick="openEditGuide(${realIndex})" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
-
-        const card = `
-           <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition">
-                <div>
-                    <div class="flex justify-between items-center gap-2">
-                        <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">${guide.tag || 'Bài học'}</span>
-                        <span class="text-[11px] text-slate-400 font-medium">${categoryNames[guide.category] || ''}</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mt-3 leading-snug hover:text-teal-700 cursor-pointer" onclick="openArticleModal(${realIndex})">${guideTitle}</h3>
-                    ${mediaHtml}
-                    <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${shortExcerpt}</p>
-                </div>
-                <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-                    <span>⏱ ${guide.duration || 'Đọc hiểu: 4 phút'}</span>
-                    <div class="flex items-center">
-                        <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">
-                            Đọc tiếp →
-                        </button>
-                        ${editBtnHtml}
-                    </div>
-                </div>
-            </div>
-        `;
-        container.innerHTML += card;
-    });
 }
 
 // =========================================================================
