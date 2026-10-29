@@ -709,6 +709,65 @@ function renderCards() {
     }
 
     const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+    const initialShow = 6; // Chỉ hiện 6 bài học đầu tiên
+
+    filtered.forEach((guide, displayIndex) => {
+        let mediaHtml = '';
+        if (guide.mediaUrl && guide.mediaUrl !== '') {
+            if (guide.mediaType === 'image') {
+                // Ép tỷ lệ 16:9 bằng aspect-video và object-cover để cắt cúp ảnh hoàn hảo
+                mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${guide.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-video object-cover"></div>`;
+            } else if (guide.mediaType === 'video') {
+                mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${guide.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+            }
+        }
+        
+        const realIndex = guidesData.indexOf(guide);
+        const guideTitle = guide.title || guide.tieuDe || '';
+        const guideContent = guide.content || guide.noiDung || '';
+        const rawText = guide.summary || guideContent || '';
+        const shortExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
+        const editBtnHtml = isAdmin ? `<button onclick="openEditGuide(${realIndex})" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2">✏️ Sửa</button>` : '';
+
+        // Ẩn các bài vượt quá số lượng initialShow
+        const isHidden = displayIndex >= initialShow ? 'hidden item-guide-extra' : '';
+
+        const card = `
+           <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition ${isHidden}">
+                <div>
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">${guide.tag || 'Bài học'}</span>
+                        <span class="text-[11px] text-slate-400 font-medium">${categoryNames[guide.category] || ''}</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mt-3 leading-snug hover:text-teal-700 cursor-pointer" onclick="openArticleModal(${realIndex})">${guideTitle}</h3>
+                    ${mediaHtml}
+                    <p class="text-slate-600 text-sm mt-2.5 leading-relaxed">${shortExcerpt}</p>
+                </div>
+                <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                    <span>⏱ ${guide.duration || 'Đọc hiểu: 4 phút'}</span>
+                    <div class="flex items-center">
+                        <button onclick="openArticleModal(${realIndex})" class="text-teal-600 font-semibold hover:underline">Đọc tiếp →</button>
+                        ${editBtnHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+
+    // Tạo nút Xem thêm nếu số bài lớn hơn mức giới hạn
+    if (filtered.length > initialShow) {
+        container.innerHTML += `
+            <div class="col-span-full flex justify-center mt-6 w-full">
+                <button onclick="document.querySelectorAll('.item-guide-extra').forEach(el => el.classList.remove('hidden')); this.parentElement.remove();" class="text-teal-700 text-sm font-semibold border border-teal-600 bg-white px-6 py-2.5 rounded-full hover:bg-teal-50 transition shadow-sm">
+                    ⬇️ Xem tất cả (${filtered.length}) bài học
+                </button>
+            </div>
+        `;
+    }
+}
+
+    const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
 
     filtered.forEach((guide) => {
         let mediaHtml = '';
@@ -760,7 +819,8 @@ function renderCards() {
 function renderModalMedia(mediaUrl, mediaType) {
     if (!mediaUrl) return '';
     if (mediaType === 'image') {
-        return `<div class="my-4 rounded-xl overflow-hidden shadow-sm"><img src="${mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-[500px]"></div>`;
+        // Dùng object-contain để giữ nguyên tỷ lệ gốc của ảnh khi phóng to trong modal
+        return `<div class="my-4 rounded-xl overflow-hidden shadow-sm bg-slate-50 flex justify-center"><img src="${mediaUrl}" alt="Ảnh minh họa" class="max-w-full h-auto max-h-[500px] object-contain"></div>`;
     } else if (mediaType === 'video') {
         return `<div class="my-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
     }
@@ -968,25 +1028,26 @@ async function loadTinTuc() {
         });
 
         const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+        const initialShow = 4; // Chỉ hiện 4 tin tức đầu tiên
 
         tinTucData.forEach((item, index) => {
             let mediaHtml = '';
             if (item.mediaUrl && item.mediaUrl !== '') {
                 if (item.mediaType === 'image') {
-                    mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${item.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
+                    mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${item.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-video object-cover"></div>`;
                 } else if (item.mediaType === 'video') {
-                    mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${item.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+                    mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${item.mediaUrl}" frameborder="0" allowfullscreen></iframe></div>`;
                 }
             }
 
             const fullText = item.noiDung || '';
             const shortText = fullText.length > 180 ? fullText.substring(0, 180) + '...' : fullText;
-            const sourceBadge = item.nguonLink ? `<a href="${item.nguonLink}" target="_blank" rel="noopener noreferrer" class="text-xs text-teal-600 hover:underline inline-flex items-center gap-1 mt-2">🔗 Có đính kèm link nguồn gốc chuẩn bản quyền</a>` : '';
-
+            const sourceBadge = item.nguonLink ? `<a href="${item.nguonLink}" target="_blank" class="text-xs text-teal-600 hover:underline inline-flex items-center gap-1 mt-2">🔗 Link nguồn chuẩn bản quyền</a>` : '';
             const editBtnHtml = isAdmin ? `<button onclick="openEditTinTuc(${index})" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>` : '';
+            const isHidden = index >= initialShow ? 'hidden item-news-extra' : '';
 
             container.innerHTML += `
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between ${isHidden}">
                     <div>
                         <span class="text-xs text-teal-700 font-semibold">📅 ${item.ngayDang || ''}</span>
                         <h3 class="font-bold text-slate-900 text-lg mt-1 mb-2 cursor-pointer hover:text-teal-700" onclick="openTinTucModal(${index})">${item.tieuDe || item.tieude || ''}</h3>
@@ -997,15 +1058,23 @@ async function loadTinTuc() {
                     <div class="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center">
                         <span class="text-xs text-slate-400">Tin tức khoa học</span>
                         <div class="flex items-center">
-                            <button onclick="openTinTucModal(${index})" class="text-teal-600 font-semibold text-xs hover:underline">
-                                Đọc chi tiết →
-                            </button>
+                            <button onclick="openTinTucModal(${index})" class="text-teal-600 font-semibold text-xs hover:underline">Đọc chi tiết →</button>
                             ${editBtnHtml}
                         </div>
                     </div>
                 </div>
             `;
         });
+
+        if (tinTucData.length > initialShow) {
+            container.innerHTML += `
+                <div class="col-span-full flex justify-center mt-4 w-full">
+                    <button onclick="document.querySelectorAll('.item-news-extra').forEach(el => el.classList.remove('hidden')); this.parentElement.remove();" class="text-teal-700 text-sm font-semibold border border-teal-600 bg-white px-6 py-2.5 rounded-full hover:bg-teal-50 transition shadow-sm">
+                        ⬇️ Xem tất cả tin tức
+                    </button>
+                </div>
+            `;
+        }
     } catch (error) {
         console.error("Lỗi tải tin tức: ", error);
     }
@@ -1026,6 +1095,8 @@ async function loadTamSu() {
 
         const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
         tamSuDataMap = {};
+        const initialShow = 3; // Chỉ hiện 3 bài tâm sự đầu tiên
+        let loopIndex = 0;
 
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
@@ -1036,16 +1107,17 @@ async function loadTamSu() {
             let mediaHtml = '';
             if (data.mediaUrl && data.mediaUrl !== '') {
                 if (data.mediaType === 'image') {
-                    mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${data.mediaUrl}" alt="Ảnh minh họa" class="w-full h-auto object-cover max-h-96"></div>`;
+                    mediaHtml = `<div class="mt-4 rounded-xl overflow-hidden shadow-sm"><img src="${data.mediaUrl}" alt="Ảnh minh họa" class="w-full aspect-video object-cover"></div>`;
                 } else if (data.mediaType === 'video') {
-                    mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${data.mediaUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+                    mediaHtml = `<div class="mt-4 relative w-full overflow-hidden pt-[56.25%] rounded-xl shadow-sm"><iframe class="absolute top-0 left-0 bottom-0 right-0 w-full h-full" src="${data.mediaUrl}" frameborder="0" allowfullscreen></iframe></div>`;
                 }
             }
 
+            const isHidden = loopIndex >= initialShow ? 'hidden item-tamsu-extra' : '';
             const postElement = document.createElement("div");
-            postElement.className = "tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm";
+            postElement.className = `tam-su-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm ${isHidden}`;
             
-            const editBtnHtml = isAdmin ? `<button onclick="openEditTamSu('${postId}')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 ml-2 text-xs">✏️ Sửa</button>` : '';
+            const editBtnHtml = isAdmin ? `<button onclick="openEditTamSu('${postId}')" class="text-amber-600 font-semibold border border-amber-500 px-2 py-1 rounded hover:bg-amber-50 text-xs">✏️ Sửa bài viết</button>` : '';
 
             postElement.innerHTML = `
                 <div class="flex justify-between items-start gap-2">
@@ -1062,18 +1134,28 @@ async function loadTamSu() {
                     
                     <div id="comment-form-wrapper-${postId}" class="comment-form-box mt-3" style="display: ${currentUser ? 'block' : 'none'};">
                         <textarea id="comment-input-${postId}" placeholder="Viết chia sẻ của bạn..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm mb-2 focus:outline-none focus:border-teal-600"></textarea>
-                        <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">
-                            Gửi bình luận
-                        </button>
+                        <button onclick="guiBinhLuan('${postId}')" class="bg-teal-600 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition">Gửi bình luận</button>
                     </div>
                     <p id="login-prompt-${postId}" class="login-prompt-msg text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg text-xs italic mt-2" style="display: ${currentUser ? 'none' : 'block'};">
-                        🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập bằng Google</button> để viết bình luận (chống spam).
+                        🔒 Bạn cần <button onclick="dangNhapGoogle()" class="font-bold underline text-teal-700 hover:text-teal-900">Đăng nhập Google</button> để bình luận (chống spam).
                     </p>
                 </div>
             `;
             container.appendChild(postElement);
             taiBinhLuanRealtime(postId);
+            loopIndex++;
         });
+
+        if (loopIndex > initialShow) {
+            const btnWrapper = document.createElement('div');
+            btnWrapper.className = "flex justify-center mt-4 w-full";
+            btnWrapper.innerHTML = `
+                <button onclick="document.querySelectorAll('.item-tamsu-extra').forEach(el => el.classList.remove('hidden')); this.parentElement.remove();" class="text-teal-700 text-sm font-semibold border border-teal-600 bg-white px-6 py-2.5 rounded-full hover:bg-teal-50 transition shadow-sm">
+                    ⬇️ Xem tất cả tâm sự
+                </button>
+            `;
+            container.appendChild(btnWrapper);
+        }
     } catch (error) {
         console.error("Lỗi tải tâm sự: ", error);
     }
